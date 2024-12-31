@@ -4,21 +4,21 @@ import java.net.InetAddress;
 
 public class IdentifierGenerator {
 
-    private final IdGeneratorSnowflake sequence;
+    private final IdGeneratorSnowflake generatorSnowflake;
     private IdentifierGenerator() {
-        this.sequence = new IdGeneratorSnowflake(null);
+        this.generatorSnowflake = new IdGeneratorSnowflake(null);
     }
 
     public IdentifierGenerator(InetAddress inetAddress) {
-        this.sequence = new IdGeneratorSnowflake(inetAddress);
+        this.generatorSnowflake = new IdGeneratorSnowflake(inetAddress);
     }
 
     public IdentifierGenerator(long workerId, long dataCenterId) {
-        this.sequence = new IdGeneratorSnowflake(workerId, dataCenterId);
+        this.generatorSnowflake = new IdGeneratorSnowflake(workerId, dataCenterId);
     }
 
     public Long nextId() {
-        return sequence.nextId();
+        return generatorSnowflake.nextId();
     }
 
     public static IdentifierGenerator getDefaultGenerator() {
@@ -29,6 +29,12 @@ public class IdentifierGenerator {
 
         public static final IdentifierGenerator INSTANCE = new IdentifierGenerator();
 
+    }
+
+    public static void main(String[] args) {
+        for (int i = 0; i < 10; i++) {
+            System.out.println(DefaultInstance.INSTANCE.nextId());
+        }
     }
 
 }

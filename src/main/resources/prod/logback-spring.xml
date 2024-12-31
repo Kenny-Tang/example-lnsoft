@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!-- 引入 Spring Boot 默认的 logback XML 配置文件  -->
+    <!-- prod logback file  -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
     <!-- 控制台 Appender -->
