@@ -1,4 +1,4 @@
-package com.redjujubetree.example.common;
+package com.redjujubetree;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

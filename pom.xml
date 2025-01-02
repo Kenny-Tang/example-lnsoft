@@ -22,6 +22,8 @@
 	</developers>
 	<modules>
 		<module>example-algorithm</module>
+		<module>ztbgl</module>
+		<module>common</module>
 	</modules>
 	<scm>
 		<connection/>

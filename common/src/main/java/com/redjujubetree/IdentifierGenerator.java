@@ -1,4 +1,4 @@
-package com.redjujubetree.example.common;
+package com.redjujubetree;
 
 import java.net.InetAddress;
 

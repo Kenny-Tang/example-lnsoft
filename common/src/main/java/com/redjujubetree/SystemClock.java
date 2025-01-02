@@ -1,4 +1,4 @@
-package com.redjujubetree.example.common;
+package com.redjujubetree;
 
 import java.sql.Timestamp;
 import java.util.concurrent.Executors;
