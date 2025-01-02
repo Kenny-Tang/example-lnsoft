@@ -15,7 +15,6 @@ src
 │   │   │   └── application.properties (测试环境配置)
 │   │   ├── prod
 │   │   │   └── application.properties (生产环境配置)
-
 ```
 
 # 配置 Maven 的 pom.xml
