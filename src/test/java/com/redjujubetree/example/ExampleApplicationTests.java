@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.io.FileInputStream;
 
 @SpringBootTest
-class ExampleApplicationTests {
+public class ExampleApplicationTests {
 
 	@Resource
 	private UsersService usersService;

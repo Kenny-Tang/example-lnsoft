@@ -10,6 +10,7 @@
 	<groupId>com.redjujubetree</groupId>
 	<artifactId>example</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
+	<packaging>pom</packaging>
 	<name>example</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
@@ -19,6 +20,9 @@
 	<developers>
 		<developer/>
 	</developers>
+	<modules>
+		<module>example-algorithm</module>
+	</modules>
 	<scm>
 		<connection/>
 		<developerConnection/>
