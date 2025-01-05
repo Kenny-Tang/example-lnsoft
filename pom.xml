@@ -22,7 +22,7 @@
 	</developers>
 	<modules>
 		<module>example-algorithm</module>
-		<module>ztbgl</module>
+		<module>example-web</module>
 		<module>common</module>
 	</modules>
 	<scm>

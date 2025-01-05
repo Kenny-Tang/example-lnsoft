@@ -52,6 +52,7 @@
             <!-- skywalking插件, log加tid -->
             <provider class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.logstash.TraceIdJsonProvider" />
         </encoder>
+        <keepAliveDuration>5 minutes</keepAliveDuration>
     </appender>
 
     <!-- 设置 Appender -->
