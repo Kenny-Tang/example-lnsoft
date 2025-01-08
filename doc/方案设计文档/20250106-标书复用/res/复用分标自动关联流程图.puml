@@ -1,0 +1,15 @@
+@startuml
+title 复用分标自动关联流程图
+start
+:查询目标分标信息;
+note right
+目标分标的信息，在选择分标的时候已经确定
+选择复用的项目及分标
+endnote
+:关联直接父级目录信息;
+if (目录名称相同) is (是) then
+:复用目录;
+:客户端服务，保存服用的映射关系; 
+endif 
+end 
+@enduml
