@@ -4,21 +4,28 @@ Docker 在容器的基础上，进行了进一步的封装，从文件系统、�
 下面的图片比较了 Docker 和传统虚拟化方式的不同之处。传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比传统虚拟机更为轻便。
 
 传统虚拟化
+
 ![img.png](images/virtual_machines.png)
 
 Docker
+
 ![img_1.png](images/docker_structure.png)
 # 安装
 
 服务所在的机器 `hera`
 ## 安装所需的软件包
-	sudo dnf install yum-utils
+```shell
+yum install -y yum-utils \
+           device-mapper-persistent-data \
+           lvm2 --skip-broken
+```
 
 ### 常见问题
-	Errors during downloading metadata for repository 'appstream':
-	- Curl error (6): Couldn't resolve host name for http://mirrorlist.centos.org/?release=8&arch=x86_64&repo=AppStream&infra=stock [Could not resolve host: mirrorlist.centos.org]
-	  Error: Failed to download metadata for repo 'appstream': Cannot prepare internal mirrorlist: Interrupted by signal
-
+```shell
+Loading mirror speeds from cached hostfile
+Could not retrieve mirrorlist http://mirrorlist.centos.org/?release=7&arch=x86_64&repo=os&infra=stock error was
+14: curl#6 - "Could not resolve host: mirrorlist.centos.org; 未知的错误"
+```
 mirrorlist.centos.org这个域名被弃用了，更换源地址即可：
 首先到储存源文件的目录
 
@@ -30,26 +37,20 @@ mirrorlist.centos.org这个域名被弃用了，更换源地址即可：
 	[root@hera yum.repos.d]# sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo
 	[root@hera yum.repos.d]# sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
 
-	[root@hera yum.repos.d]# dnf clean all
-	0 files removed
-	[root@hera yum.repos.d]# dnf makecache    ## 更新镜像
-
-	CentOS Linux 8 - AppStream                                                                                                                                                  4.1 MB/s | 8.4 MB     00:02
-	CentOS Linux 8 - BaseOS                                                                                                                                                     2.6 MB/s | 4.6 MB     00:01
-	CentOS Linux 8 - Extras                                                                                                                                                     8.6 kB/s |  10 kB     00:01
-	Metadata cache created.
-
 ## 设置仓库
 选择阿里云的镜像源
 
-	[root@hera ~]# sudo yum-config-manager     --add-repo     https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+	[root@hera ~]# yum-config-manager     --add-repo     https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+    [root@hera ~]# sed -i 's/download.docker.com/mirrors.aliyun.com\/docker-ce/g' /etc/yum.repos.d/docker-ce.repo
+    [root@hera ~]# yum makecache fast
+
 ## 安装 Docker Engine-Community
 
-	$ sudo yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+	# yum install -y docker-ce
 
 ## 启动 docker
 
-	sudo systemctl start docker
+	# systemctl start docker
 
 通过运行 hello-world 镜像来验证是否正确安装了 Docker Engine-Community 。
 
@@ -94,7 +95,7 @@ For more examples and ideas, visit:
 	sudo vim /etc/docker/daemon.json
 
 修改为
-```shell
+```json
 {
   "registry-mirrors": [
     "https://hub-mirror.c.163.com",
@@ -104,6 +105,9 @@ For more examples and ideas, visit:
 }
 ```
 
+> 如果配置了还是拉不下来，直接制定镜像源使用<br />
+> docker pull docker.1ms.run/nginx:1.27.3-perl
+
 重启 docker 即可
 
 	[root@hera docker]# systemctl restart docker
@@ -112,6 +116,7 @@ For more examples and ideas, visit:
 ```shell
 [root@hera ~]# systemctl enable docker
 ```
+
 
 # 部署SpringBoot项目
 创建项目存放目录
