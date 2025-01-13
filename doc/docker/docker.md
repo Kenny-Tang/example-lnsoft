@@ -5,11 +5,11 @@ Docker 在容器的基础上，进行了进一步的封装，从文件系统、�
 
 传统虚拟化
 
-![img.png](images/virtual_machines.png)
+![img.png](../images/virtual_machines.png)
 
 Docker
 
-![img_1.png](images/docker_structure.png)
+![img_1.png](../images/docker_structure.png)
 # 安装
 
 服务所在的机器 `hera`
@@ -66,22 +66,7 @@ Status: Downloaded newer image for hello-world:latest
 Hello from Docker!
 This message shows that your installation appears to be working correctly.
 
-To generate this message, Docker took the following steps:
- 1. The Docker client contacted the Docker daemon.
- 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
- 3. The Docker daemon created a new container from that image which runs the
-    executable that produces the output you are currently reading.
- 4. The Docker daemon streamed that output to the Docker client, which sent it
-    to your terminal.
-
-To try something more ambitious, you can run an Ubuntu container with:
- $ docker run -it ubuntu bash
-
-Share images, automate workflows, and more with a free Docker ID:
- https://cloud.docker.com/
-
-For more examples and ideas, visit:
- https://docs.docker.com/engine/userguide/
+......
 ```
 
 ### 常见问题
@@ -185,10 +170,6 @@ ENTRYPOINT ["java","-jar","/app.jar"]
 ```
 访问接口
 
-![img.png](images/hera1.png)
+![img.png](../images/hera1.png)
 
-# 添加 skywalking-agent
-
-
-<br /><br /><br /><br /><br />
 <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
