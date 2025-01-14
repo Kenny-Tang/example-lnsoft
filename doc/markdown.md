@@ -9,7 +9,7 @@
     ```
     </details>
 
-```xml
+```text
 # <summary></summary>标签下要空一行
 ```
 
