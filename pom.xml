@@ -24,7 +24,8 @@
 		<module>example-algorithm</module>
 		<module>example-web</module>
 		<module>common</module>
-	</modules>
+        <module>ztb</module>
+    </modules>
 	<scm>
 		<connection/>
 		<developerConnection/>

@@ -1,76 +1,53 @@
 package com.redjujubetree.huawei;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Scanner;
 
 public class AMain {
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		// 获取学生数量
-		int students = scanner.nextInt();
-		// 获取科目数量
-		int subjects = scanner.nextInt();
-		// 读取科目
-		List<String> subjectNames = new ArrayList<>();
-		for (int i = 0; i < subjects; i++) {
-			subjectNames.add(scanner.next());
+		int count = scanner.nextInt();
+		Node root = new Node(scanner.nextInt());
+		int max = 1;
+		for (int i = 1; i < count; i++) {
+			max = Math.max(max, insert(root, new Node(scanner.nextInt()), 1));
 		}
-		// 结束本行
-		scanner.nextLine();
-		List<StudentScore> studentScores = new ArrayList<>();
-		// 逐行读取学生的成绩
-		for (int i = 0; i < students; i++) {
-			studentScores.add(new StudentScore(scanner.nextLine()));
-		}
-		// 获取排序科目
-		String sortSubject = scanner.next();
-		for (int i = 0; i < subjectNames.size(); i++) {
-			if (subjectNames.get(i).equals(sortSubject)) {
-				StudentScore.sortSubject = i;
+		System.out.println(max);
+	}
+	public static int insert(Node root, Node node, int hight) {
+		// 插入节点后可得到的树的高度
+		hight += 1 ;
+		if (node.value < root.value - 500) {
+			// - 如果数小于节点的数减去 500，则将数插入节点的左子树<br>
+			if (root.left == null) {
+				root.left = node;
+				return hight;
 			}
+			return insert(root.left, node, hight);
+		} else if (node.value > root.value + 500){
+			// - 如果数大于节点的数加上 500，则将数插入节点的右子树
+			if (root.right == null) {
+				root.right = node;
+				return hight;
+			}
+			return insert(root.right, node, hight);
+		} else {
+			// - 否则，将数插入节点的中子树
+			if (root.middle == null) {
+				root.middle = node;
+				return hight;
+			}
+			return insert(root.middle, node, hight);
 		}
-		// 对学生成绩排序
-		Collections.sort(studentScores);
-		String res = "";
-		for (int i = 0; i < studentScores.size(); i++) {
-			res += studentScores.get(i).toString() + " ";
-		}
-		// 输出排序结果
-		System.out.println(res.trim());
 	}
 
-	private static class StudentScore implements Comparable<StudentScore> {
-		// 排序字段， 默认安按照总分排序
-		public static int sortSubject = -1;
-		// 学生总分
-		private int totalScore = 0;
-		// 学生姓名
-		private String name ;
-		// 学生各科目的成绩
-		private List<Integer> scores = new ArrayList<>();
-		public StudentScore(String studentScore) {
-			String[] split = studentScore.split(" ");
-			name = split[0];
-			for (int i = 1; i < split.length; i++) {
-				int score = Integer.parseInt(split[i]);
-				scores.add(score);
-				totalScore += score;
-			}
-		}
-
-		// 成绩又高到低排序
-		public int compareTo(StudentScore studentScore) {
-			if (sortSubject > -1) {
-				return  studentScore.scores.get(sortSubject) - scores.get(sortSubject);
-			}
-			return  studentScore.totalScore - this.totalScore;
-		}
-		// 方便输出
-		public String toString() {
-			return name;
+	static class Node{
+		public Node left;
+		public Node right;
+		public Node middle;
+		public Integer value;
+		public Node(Integer value) {
+			this.value = value;
 		}
 	}
 }
