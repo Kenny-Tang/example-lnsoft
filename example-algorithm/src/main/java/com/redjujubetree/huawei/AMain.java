@@ -1,53 +1,65 @@
 package com.redjujubetree.huawei;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class AMain {
 
+	private static List<Character> list = new ArrayList<>();
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		int count = scanner.nextInt();
-		Node root = new Node(scanner.nextInt());
-		int max = 1;
-		for (int i = 1; i < count; i++) {
-			max = Math.max(max, insert(root, new Node(scanner.nextInt()), 1));
+		try{
+			Scanner scanner = new Scanner(System.in);
+			String quacks = scanner.nextLine();
+			for (int i = 0; i < quacks.length(); i++) {
+				// 当前需要发生的音节
+				char sound = quacks.charAt(i);
+				// 下一个需要发出的音节
+				Character nextSound = nextSound(sound);
+				int i1 = hasWait(sound);
+				if (i1 == -1) {
+					// 需要增加大雁数量的情况
+					if ('q' == sound) {
+						list.add(nextSound);
+					} else {
+						throw new IllegalArgumentException("-1");
+					}
+				} else {
+					// 更新下一个需要发出的音节
+					list.set(i1, nextSound);
+				}
+			}
+			System.out.println(list.size()) ;
+		} catch (Exception e) {
+			System.out.println(-1);
 		}
-		System.out.println(max);
-	}
-	public static int insert(Node root, Node node, int hight) {
-		// 插入节点后可得到的树的高度
-		hight += 1 ;
-		if (node.value < root.value - 500) {
-			// - 如果数小于节点的数减去 500，则将数插入节点的左子树<br>
-			if (root.left == null) {
-				root.left = node;
-				return hight;
-			}
-			return insert(root.left, node, hight);
-		} else if (node.value > root.value + 500){
-			// - 如果数大于节点的数加上 500，则将数插入节点的右子树
-			if (root.right == null) {
-				root.right = node;
-				return hight;
-			}
-			return insert(root.right, node, hight);
-		} else {
-			// - 否则，将数插入节点的中子树
-			if (root.middle == null) {
-				root.middle = node;
-				return hight;
-			}
-			return insert(root.middle, node, hight);
-		}
+
 	}
 
-	static class Node{
-		public Node left;
-		public Node right;
-		public Node middle;
-		public Integer value;
-		public Node(Integer value) {
-			this.value = value;
+	// 等待发出该音节的大雁
+	private static int hasWait(char c) {
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).equals(c)) {
+				return i;
+			}
 		}
+		return -1;
+	}
+
+	// 发出当前音节后，下一个可以发出的音节
+	public static Character nextSound(char ch) {
+		switch (ch) {
+			case 'q':
+				return 'u';
+			case 'u':
+				return 'a';
+			case 'a':
+				return 'c';
+			case 'c':
+				return 'k';
+			case 'k':
+				return 'q';
+		}
+		throw new IllegalArgumentException("-1");
 	}
 }
