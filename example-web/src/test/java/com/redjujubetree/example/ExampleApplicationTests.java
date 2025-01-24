@@ -1,28 +1,17 @@
 package com.redjujubetree.example;
 
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.redjujubetree.example.service.UsersService;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
-import java.io.FileInputStream;
-
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class ExampleApplicationTests {
 
-	@Resource
-	private UsersService usersService;
-
 	@Test
-	public void list() {
-		usersService.list().forEach(user -> {
-			System.out.println(JSON.toJSONString(user));
-		});
-	}
-
 	public void test() {
+
 	}
 
 }
