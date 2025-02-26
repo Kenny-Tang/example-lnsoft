@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 /**
  * <p>
@@ -13,19 +12,17 @@ import java.time.LocalDate;
  * </p>
  *
  * @author tanjianwei
- * @since 2025-01-24
+ * @since 2025-02-08
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class UserInfo implements Serializable {
 
-
+    private Long id;
     private String username;
 
     @TableField("username_zh")
     private String usernameZh;
-
-    private String id;
 
     private String password;
 
@@ -35,10 +32,10 @@ public class UserInfo implements Serializable {
     private Integer version;
 
     @TableField("create_time")
-    private LocalDate createTime;
+    private Long createTime;
 
     @TableField("update_time")
-    private LocalDate updateTime;
+    private Long updateTime;
 
 
 }

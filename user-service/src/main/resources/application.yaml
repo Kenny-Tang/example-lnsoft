@@ -1,10 +1,12 @@
 server:
-  port: 8080
+  port: 8081
 
 logging:
   config: classpath:logback-spring.xml
 
 spring:
+  jackson:
+    date-format: "yyyy-MM-dd HH:mm:ss.SSS"
   datasource:
     url: jdbc:sqlite:/Users/kenny/IdeaProjects/userDb # 创建的sqlite数据库所在路径
     username: # 因为没有用户名和密码，所以这两个参数就没有值

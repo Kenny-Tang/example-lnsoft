@@ -18,5 +18,3 @@ start
 :验证通过，合并release代码至master;
 stop
 @enduml
-
-@enduml

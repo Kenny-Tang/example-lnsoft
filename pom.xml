@@ -25,6 +25,7 @@
 		<module>user-service</module>
 		<module>common</module>
         <module>ztb</module>
+        <module>api-gateway</module>
     </modules>
 	<scm>
 		<connection/>
@@ -44,6 +45,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 <!--		<dependency>-->
 <!--			<groupId>org.mybatis.spring.boot</groupId>-->

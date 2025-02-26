@@ -14,6 +14,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class ExampleApplicationTests {
 	@Autowired
 	private UserInfoService userInfoService;
+
+	public void createTestUsers() {
+		UserInfo userInfo = new UserInfo();
+	}
+
 	@Test
 	public void test() {
 		UserInfo byId = userInfoService.getById(1001L);

@@ -6,6 +6,8 @@ target/
 
 .DS_Store
 
+/logs/
+
 ### STS ###
 .apt_generated
 .classpath

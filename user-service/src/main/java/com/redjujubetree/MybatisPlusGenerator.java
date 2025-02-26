@@ -11,7 +11,7 @@ public class MybatisPlusGenerator {
 		AutoGenerator autoGenerator = new AutoGenerator(new DataSourceConfig.Builder("jdbc:sqlite:/Users/kenny/IdeaProjects/userDb", "", "").build());
 		GlobalConfig build = new GlobalConfig.Builder()
 				.author("tanjianwei")
-				.openDir(false)
+				.disableOpenDir()
 				.fileOverride()
 				.outputDir("user-service/src/main/java").build();
 		autoGenerator.global(build);
@@ -26,7 +26,6 @@ public class MybatisPlusGenerator {
 
 		autoGenerator.injection(injectionConfig);
 		TemplateConfig build2 = new TemplateConfig.Builder()
-				.mapperXml("")
 				.mapper("")
 				.controller("")
 				//.service("", "")
@@ -39,7 +38,8 @@ public class MybatisPlusGenerator {
 				.naming(NamingStrategy.underline_to_camel)
 				.columnNaming(NamingStrategy.underline_to_camel);
 		builder.addInclude("user_info").entityBuilder().mapperBuilder().build();
-		autoGenerator.strategy(builder.build());
+		StrategyConfig build3 = builder.build();
+		autoGenerator.strategy(build3);
 		autoGenerator.execute(new FreemarkerTemplateEngine());
 	}
 }
