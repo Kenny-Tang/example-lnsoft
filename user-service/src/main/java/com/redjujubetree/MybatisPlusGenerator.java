@@ -1,45 +1,63 @@
 package com.redjujubetree;
 
-import com.baomidou.mybatisplus.generator.AutoGenerator;
-import com.baomidou.mybatisplus.generator.config.*;
-import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.generator.FastAutoGenerator;
+import com.baomidou.mybatisplus.generator.config.TemplateType;
+import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+
+import java.sql.Types;
+import java.util.Scanner;
 
 public class MybatisPlusGenerator {
 	public static void main(String[] args) {
-		// AutoGenerator autoGenerator = new AutoGenerator(new DataSourceConfig.Builder("jdbc:mysql://172.16.118.101:3306/test", "root", "123456").build());
-		AutoGenerator autoGenerator = new AutoGenerator(new DataSourceConfig.Builder("jdbc:sqlite:/Users/kenny/IdeaProjects/userDb", "", "").build());
-		GlobalConfig build = new GlobalConfig.Builder()
-				.author("tanjianwei")
-				.disableOpenDir()
-				.fileOverride()
-				.outputDir("user-service/src/main/java").build();
-		autoGenerator.global(build);
-		PackageConfig build1 = new PackageConfig.Builder()
-				.parent("com.redjujubetree")
-				.entity("model.entity")
-				//.pathInfo(Collections.singletonMap("xml","user-service/src/main/resources/mapper" ))
-				.moduleName("users").build();
-		autoGenerator.packageInfo(build1);
-		// 自定义配置
-		InjectionConfig injectionConfig = new InjectionConfig.Builder().build();
-
-		autoGenerator.injection(injectionConfig);
-		TemplateConfig build2 = new TemplateConfig.Builder()
-				.mapper("")
-				.controller("")
-				//.service("", "")
-				//.entity("entity.java")
-				.build();
-		autoGenerator.template(build2);
-		StrategyConfig.Builder builder = new StrategyConfig.Builder();
-		builder.entityBuilder()
-				.enableLombok()
-				.naming(NamingStrategy.underline_to_camel)
-				.columnNaming(NamingStrategy.underline_to_camel);
-		builder.addInclude("user_info").entityBuilder().mapperBuilder().build();
-		StrategyConfig build3 = builder.build();
-		autoGenerator.strategy(build3);
-		autoGenerator.execute(new FreemarkerTemplateEngine());
+		FastAutoGenerator.create("jdbc:mysql://47.113.144.60:7500/xiaozaoshu?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8", "root", "1234Qwer")
+				.globalConfig(builder -> {
+					builder.author("tanjianwei") // 设置作者
+							.outputDir(System.getProperty("user.dir") + "/user-service/src/main/java") // 设置输出路径
+							.fileOverride(); // 设置文件覆盖
+				})
+				.dataSourceConfig(builder ->
+						builder.typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {
+							int typeCode = metaInfo.getJdbcType().TYPE_CODE;
+							if (typeCode == Types.SMALLINT) {
+								// 自定义类型转换
+								return DbColumnType.INTEGER;
+							}
+							return typeRegistry.getColumnType(metaInfo);
+						})
+				)
+				.packageConfig(builder ->
+						builder.parent("com.redjujubetree") // 设置父包名
+								.moduleName("users") // 设置父包模块名
+								.entity("model.entity") // 设置实体类包名
+				)
+				.strategyConfig(builder ->
+						builder.addInclude(scanner("表名")) // 设置需要生成的表名
+								.serviceBuilder() // 设置不生成service接口
+				)
+				.templateConfig(builder ->
+						builder.disable(TemplateType.CONTROLLER)
+								.disable(TemplateType.SERVICE)
+								.disable(TemplateType.SERVICE_IMPL)
+								.disable(TemplateType.XML)
+								.disable(TemplateType.MAPPER)
+				)
+				.templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
+				.execute();
+	}
+	public static String scanner(String tip) {
+		Scanner scanner = new Scanner(System.in);
+		StringBuilder help = new StringBuilder();
+		help.append("请输入" + tip + "：");
+		System.out.println(help.toString());
+		if (scanner.hasNext()) {
+			String ipt = scanner.next();
+			if (StringUtils.isNotEmpty(ipt)) {
+				return ipt;
+			}
+		}
+		throw new MybatisPlusException("请输入正确的" + tip + "！");
 	}
 }

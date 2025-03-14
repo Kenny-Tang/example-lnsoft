@@ -9,6 +9,9 @@ spring:
       discovery:
         server-addr: localhost:8848
         service: ${spring.application.name}
+      config:
+        server-addr: localhost:8848
+        file-extension: yml
     gateway:
       routes:
         - id: user-service
