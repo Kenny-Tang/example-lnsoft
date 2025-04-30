@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping("/article")
+@RequestMapping("/users/article")
 public class ArticleController {
 
     @Autowired

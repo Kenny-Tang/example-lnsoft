@@ -15,6 +15,11 @@ public class ExampleApplicationTests {
 	@Autowired
 	private UserInfoService userInfoService;
 
+	public void InitDbInfo() {
+		UserInfo userInfo = new UserInfo();
+
+	}
+
 	public void createTestUsers() {
 		UserInfo userInfo = new UserInfo();
 	}

@@ -2,7 +2,6 @@ package com.redjujubetree;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.IdGenerator;
 
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
@@ -40,9 +39,10 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author tanjianwei
  */
+
 public class IdGeneratorSnowflake {
 
-    private static final Logger logger = LoggerFactory.getLogger(IdGenerator.class);
+    private static final Logger logger = LoggerFactory.getLogger(IdGeneratorSnowflake.class);
     /**
      * 时间起始标记点，作为基准，一般取系统的最近时间（一旦确定不能变动）
      */

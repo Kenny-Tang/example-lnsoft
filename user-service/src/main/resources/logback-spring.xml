@@ -59,8 +59,8 @@
     <root level="INFO">
         <appender-ref ref="console"/>
         <appender-ref ref="file"/>
-        <appender-ref ref="LOGSTASH"/>
-        <appender-ref ref="grpc-log"/>
+<!--        <appender-ref ref="LOGSTASH"/>-->
+<!--        <appender-ref ref="grpc-log"/>-->
     </root>
 
 </configuration>

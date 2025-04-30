@@ -1,10 +1,9 @@
 package com.redjujubetree.huawei;
 
-import org.junit.jupiter.api.Test;
 
 public class LogReport {
 
-	@Test
+
 	public void report() {
 		String line = "3 7 40 10 60";
 		line = "50 60 1";
