@@ -1,15 +1,14 @@
 package com.redjujubetree.example;
 
 import com.alibaba.fastjson2.JSON;
-import com.redjujubetree.users.model.entity.UserInfo;
-import com.redjujubetree.users.service.impl.UserInfoService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.redjujubetree.users.domain.entity.UserInfo;
+import com.redjujubetree.users.service.UserInfoService;
+import lombok.Setter;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
+@Setter
 @SpringBootTest
 public class ExampleApplicationTests {
 	@Autowired
@@ -25,16 +24,23 @@ public class ExampleApplicationTests {
 	}
 
 	@Test
-	public void test() {
+	public void save() {
+		UserInfo userInfo = new UserInfo();
+		userInfoService.saveUserInfo(userInfo);
+	}
+	@Test
+	public void getByIdUserInfo() {
+		System.out.println("this is a test message");
 		UserInfo byId = userInfoService.getById(1001L);
 		System.out.println(JSON.toJSONString(byId));
 	}
 
-	public UserInfoService getUserInfoService() {
-		return userInfoService;
+	@Test
+	public void updateUserInfo() {
+		System.out.println("this is a test message");
+		UserInfo byId = userInfoService.getById(1001L);
+		userInfoService.updateById(byId);
+		System.out.println(JSON.toJSONString(byId));
 	}
 
-	public void setUserInfoService(UserInfoService userInfoService) {
-		this.userInfoService = userInfoService;
-	}
 }

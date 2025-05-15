@@ -1,6 +1,6 @@
 package com.redjujubetree.users.mapper;
 
-import com.redjujubetree.users.domain.entity.UserInfo;
+import com.redjujubetree.users.domain.entity.UserVisitTrace;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author tanjianwei
- * @since 2025-05-07
+ * @since 2025-05-13
  */
-public interface UserInfoMapper extends BaseMapper<UserInfo> {
+public interface UserVisitTraceMapper extends BaseMapper<UserVisitTrace> {
 
 }

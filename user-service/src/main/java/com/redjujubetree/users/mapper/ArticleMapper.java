@@ -1,7 +1,10 @@
 package com.redjujubetree.users.mapper;
 
-import com.redjujubetree.users.model.entity.Article;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.redjujubetree.users.domain.dto.ArticleDTO;
+import com.redjujubetree.users.domain.entity.Article;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ArticleMapper extends BaseMapper<Article> {
 
+	List<ArticleDTO> queryArticleList() ;
 }

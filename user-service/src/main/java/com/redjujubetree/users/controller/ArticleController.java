@@ -1,8 +1,8 @@
 package com.redjujubetree.users.controller;
 
-import cn.hutool.core.collection.CollectionUtil;
-import com.redjujubetree.users.model.dto.ArticleDTO;
-import com.redjujubetree.users.model.entity.Article;
+import com.redjujubetree.response.BaseResponse;
+import com.redjujubetree.response.RespCodeEnum;
+import com.redjujubetree.users.domain.dto.ArticleDTO;
 import com.redjujubetree.users.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -24,23 +22,17 @@ public class ArticleController {
 
     @ResponseBody
     @RequestMapping("/list" )
-    public List<ArticleDTO> hello() {
-        List<Article> list = articleService.list();
-        List<ArticleDTO> articleDTOList = Collections.emptyList();
-        if (CollectionUtil.isNotEmpty(list)) {
-            articleDTOList = list.stream().map(t -> {
-                ArticleDTO articleDTO = new ArticleDTO();
-                articleDTO.setId(t.getId().toString());
-                articleDTO.setPath(t.getPath());
-                articleDTO.setName(t.getName());
-                articleDTO.setUrl(t.getUrl());
-                articleDTO.setIcon(t.getIcon());
-                articleDTO.setComponent(t.getComponent());
-                articleDTO.setCreateTime(t.getCreateTime().toString());
-                return articleDTO;
-            }).collect(Collectors.toList());
+    public BaseResponse list() {
+        try {
+            List<ArticleDTO> articleDTOList = articleService.queryUserArticleList();
+            return BaseResponse.ofSuccess(articleDTOList);
+        } catch(IllegalArgumentException e){
+            log.warn(e.getMessage(), e);
+            return new BaseResponse(RespCodeEnum.PARAM_ERROR.getCode(), RespCodeEnum.PARAM_ERROR.getMessage());
+        } catch (Exception e) {
+            log.error("系统异常请联系管理员处理", e);
+            return new BaseResponse(RespCodeEnum.FAIL.getCode(), "系统异常请联系管理员处理");
         }
-        return articleDTOList;
     }
 
     public ArticleService getArticleService() {

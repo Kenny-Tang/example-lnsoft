@@ -1,19 +1,24 @@
 package com.redjujubetree.users.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.redjujubetree.users.mapper.ArticleMapper;
-import com.redjujubetree.users.model.entity.Article;
-import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.redjujubetree.users.domain.dto.ArticleDTO;
+import com.redjujubetree.users.domain.entity.Article;
 
 import java.util.List;
 
-@Service
-public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
+/**
+ * <p>
+ *  服务类
+ * </p>
+ *
+ * @author tanjianwei
+ * @since 2025-05-13
+ */
+public interface ArticleService extends IService<Article> {
 
-	public List<Article> list() {
-		LambdaQueryWrapper<Article> queryWrapper = Wrappers.lambdaQuery();
-		return baseMapper.selectList(queryWrapper);
-	}
+    void saveArticle(Article article);
+
+    void updateArticleById(Article article);
+
+    List<ArticleDTO> queryUserArticleList();
 }
