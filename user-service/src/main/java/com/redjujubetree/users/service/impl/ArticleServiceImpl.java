@@ -1,8 +1,6 @@
 package com.redjujubetree.users.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.redjujubetree.users.domain.dto.ArticleDTO;
@@ -10,8 +8,8 @@ import com.redjujubetree.users.domain.dto.param.HomeViewArticleQueryDTO;
 import com.redjujubetree.users.domain.entity.Article;
 import com.redjujubetree.users.domain.entity.ColumnInfo;
 import com.redjujubetree.users.mapper.ArticleMapper;
+import com.redjujubetree.users.mapper.ColumnInfoMapper;
 import com.redjujubetree.users.service.ArticleService;
-import com.redjujubetree.users.service.ColumnInfoService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,7 +34,7 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
 	@Resource
-	private ColumnInfoService columnInfoService;
+	private ColumnInfoMapper columnInfoMapper;
 
     @Transactional(rollbackFor = Throwable.class)
 	public void saveArticle(Article article) {
@@ -57,10 +55,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
 	@Override
 	public List<ArticleDTO> queryUserArticleList() {
-		LambdaQueryWrapper<ColumnInfo> queryWrapper = Wrappers.lambdaQuery();
-		queryWrapper.orderByAsc(ColumnInfo::getDisplayOrder);
-		List<ColumnInfo> list = columnInfoService.list(queryWrapper);
-		List<ArticleDTO> articleDTOS = getBaseMapper().queryArticleList();
+		List<ColumnInfo> list = columnInfoMapper.getColumnInfosWithDisplayOrder();
+		List<ArticleDTO> articleDTOS = baseMapper.queryArticleList();
 
 		List<ArticleDTO> results = list.stream().map(e -> {
 			ArticleDTO articleDTO = new ArticleDTO();
@@ -91,18 +87,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 	}
 
 	public Page<Article> queryHomeView(HomeViewArticleQueryDTO query) {
-		LambdaQueryWrapper<Article> queryWrapper = Wrappers.lambdaQuery(Article.class);
-		queryWrapper.ne(Article::getUrl, "/articles/Home.md");
-
-		queryWrapper.orderByAsc(Article::getDisplayOrder);
-		if (query.getSearchKey() != null && !query.getSearchKey().isEmpty()) {
-			queryWrapper.and(wrapper -> wrapper
-					.like(Article::getTitle, query.getSearchKey())
-					.or()
-					.like(Article::getSummary, query.getSearchKey()));
-		}
-		Page<Article> articlePage = getBaseMapper().selectPage(new Page<>(query.getPageNum(), query.getPageSize()), queryWrapper);
-
+		Page<Article> articlePage = baseMapper.getArticlePage(query);
 		return  articlePage;
 	}
+
+
 }
