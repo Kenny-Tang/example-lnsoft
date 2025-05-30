@@ -93,7 +93,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 	public Page<Article> queryHomeView(HomeViewArticleQueryDTO query) {
 		LambdaQueryWrapper<Article> queryWrapper = Wrappers.lambdaQuery(Article.class);
 		queryWrapper.ne(Article::getUrl, "/articles/Home.md");
+
 		queryWrapper.orderByAsc(Article::getDisplayOrder);
+		if (query.getSearchKey() != null && !query.getSearchKey().isEmpty()) {
+			queryWrapper.and(wrapper -> wrapper
+					.like(Article::getTitle, query.getSearchKey())
+					.or()
+					.like(Article::getSummary, query.getSearchKey()));
+		}
 		Page<Article> articlePage = getBaseMapper().selectPage(new Page<>(query.getPageNum(), query.getPageSize()), queryWrapper);
 
 		return  articlePage;

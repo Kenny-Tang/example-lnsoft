@@ -9,14 +9,14 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: nacos-standalone:8848
+        server-addr: 127.0.0.1:8848
         namespace: public
         watch-delay: 5000  # 延迟注册时间（单位：毫秒）
         group: DEFAULT_GROUP
         file-extension: yaml
         refresh-enabled: true
       discovery:
-        server-addr: nacos-standalone:8848
+        server-addr: 127.0.0.1:8848
         namespace: public
         group: DEFAULT_GROUP
         heartbeat-interval: 5000  # 每5秒发送一次心跳
