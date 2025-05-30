@@ -1,7 +1,9 @@
 package com.redjujubetree.users.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.redjujubetree.users.domain.dto.ArticleDTO;
+import com.redjujubetree.users.domain.dto.param.HomeViewArticleQueryDTO;
 import com.redjujubetree.users.domain.entity.Article;
 
 import java.util.List;
@@ -21,4 +23,6 @@ public interface ArticleService extends IService<Article> {
     void updateArticleById(Article article);
 
     List<ArticleDTO> queryUserArticleList();
+
+    Page<Article> queryHomeView(HomeViewArticleQueryDTO query);
 }

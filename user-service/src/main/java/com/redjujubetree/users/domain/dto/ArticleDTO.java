@@ -15,5 +15,6 @@ public class ArticleDTO extends ColumnDTO {
 	private String component;
 	private String updateTime;
 	private Integer displayOrder;
+	private String summary;
 	private List<ArticleDTO> children;
 }

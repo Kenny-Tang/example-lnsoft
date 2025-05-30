@@ -5,8 +5,10 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.redjujubetree.IdentifierGenerator;
 import com.redjujubetree.users.domain.dto.ArticleDTO;
+import com.redjujubetree.users.domain.dto.param.HomeViewArticleQueryDTO;
 import com.redjujubetree.users.domain.entity.Article;
 import com.redjujubetree.users.domain.entity.ArticleColumn;
 import com.redjujubetree.users.domain.entity.ColumnInfo;
@@ -35,6 +37,17 @@ public class ArticleServiceTest {
     public void testListArticles() {
         // 测试列表文章
         List<ArticleDTO> articleDTOS = articleService.queryUserArticleList();
+        System.out.println(JSON.toJSONString(articleDTOS));
+    }
+
+    @Test
+    public void testHomeView() {
+        // 测试首页文章
+        HomeViewArticleQueryDTO query = new HomeViewArticleQueryDTO();
+        Page<Article> articleDTOS = articleService.queryHomeView(query);
+        System.out.println(JSON.toJSONString(articleDTOS));
+        query.setPageNum(2);
+        articleDTOS = articleService.queryHomeView(query);
         System.out.println(JSON.toJSONString(articleDTOS));
     }
 

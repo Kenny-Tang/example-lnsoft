@@ -13,16 +13,13 @@ spring:
         - id: user-service-route
           uri: lb://user-service
           predicates:
-            - Path=/users/**
+            - Path=/api/users/**
           filters:
-            - StripPrefix=0
+            - StripPrefix=1
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
-    sentinel:
-      transport:
-        dashboard: localhost:8080
     loadbalancer:
       configurations: health-check
       cache:

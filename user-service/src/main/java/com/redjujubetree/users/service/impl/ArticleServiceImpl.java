@@ -3,8 +3,10 @@ package com.redjujubetree.users.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.redjujubetree.users.domain.dto.ArticleDTO;
+import com.redjujubetree.users.domain.dto.param.HomeViewArticleQueryDTO;
 import com.redjujubetree.users.domain.entity.Article;
 import com.redjujubetree.users.domain.entity.ColumnInfo;
 import com.redjujubetree.users.mapper.ArticleMapper;
@@ -86,5 +88,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 		}
 		Collections.sort(results, Comparator.comparing(ArticleDTO::getDisplayOrder));
 		return results;
+	}
+
+	public Page<Article> queryHomeView(HomeViewArticleQueryDTO query) {
+		LambdaQueryWrapper<Article> queryWrapper = Wrappers.lambdaQuery(Article.class);
+		queryWrapper.ne(Article::getUrl, "/articles/Home.md");
+		queryWrapper.orderByAsc(Article::getDisplayOrder);
+		Page<Article> articlePage = getBaseMapper().selectPage(new Page<>(query.getPageNum(), query.getPageSize()), queryWrapper);
+
+		return  articlePage;
 	}
 }

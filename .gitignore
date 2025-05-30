@@ -35,3 +35,8 @@ build/
 
 ### VS Code ###
 .vscode/
+/deploy/user-service/BOOT-INF/
+/deploy/user-service/META-INF/
+/deploy/user-service/org/
+deploy/api-gateway/api-gateway.jar
+deploy/user-service/user-service.jar
