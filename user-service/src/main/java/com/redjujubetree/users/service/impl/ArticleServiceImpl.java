@@ -38,14 +38,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Transactional(rollbackFor = Throwable.class)
 	public void saveArticle(Article article) {
-
-		Article entity = new Article();
-		BeanUtil.copyProperties(article, entity);
-		Date date = new Date();
-		entity.setUpdateTime(date);
-		entity.setCreateTime(date);
-		entity.setVersion(0);
-		save(entity);
+		baseMapper.saveArticle(article);
 	}
 
     public void updateArticleById(Article article) {

@@ -9,7 +9,7 @@ import java.util.Date;
  * </p>
  *
  * @author tanjianwei
- * @since 2025-05-27
+ * @since 2025-05-31
  */
 public class Article implements Serializable {
 
@@ -57,6 +57,11 @@ public class Article implements Serializable {
      * 摘要
      */
     private String summary;
+
+    /**
+     * 删除标志 0 未删除 1 已删除
+     */
+    private Boolean delFlag;
 
     public Long getId() {
         return id;
@@ -146,6 +151,14 @@ public class Article implements Serializable {
         this.summary = summary;
     }
 
+    public Boolean getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Boolean delFlag) {
+        this.delFlag = delFlag;
+    }
+
     @Override
     public String toString() {
         return "Article{" +
@@ -160,6 +173,7 @@ public class Article implements Serializable {
             ", version = " + version +
             ", displayOrder = " + displayOrder +
             ", summary = " + summary +
+            ", delFlag = " + delFlag +
         "}";
     }
 }

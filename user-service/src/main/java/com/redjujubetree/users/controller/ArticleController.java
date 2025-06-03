@@ -1,6 +1,8 @@
 package com.redjujubetree.users.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.redjujubetree.KStringUtils;
 import com.redjujubetree.response.BaseResponse;
 import com.redjujubetree.response.RespCodeEnum;
 import com.redjujubetree.users.domain.dto.ArticleDTO;
@@ -8,11 +10,10 @@ import com.redjujubetree.users.domain.dto.param.HomeViewArticleQueryDTO;
 import com.redjujubetree.users.domain.entity.Article;
 import com.redjujubetree.users.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -53,7 +54,28 @@ public class ArticleController {
         }
     }
 
-
+    @PostMapping("")
+    public BaseResponse uploadArticle(@RequestParam("articleFile") MultipartFile articleFile, @ModelAttribute ArticleDTO article) {
+        try {
+            log.info("上传文章文件: {}", articleFile.getOriginalFilename());
+            log.info("文章信息: {}", JSON.toJSONString(article));
+            // articleService.saveArticle();
+            Article article1 = new Article();
+            BeanUtils.copyProperties(article, article1);
+            String kebabCase = KStringUtils.toKebabCase(articleFile.getOriginalFilename().replace(" ", ""));
+            article1.setUrl(article.getUrl()+ articleFile.getOriginalFilename());
+            article1.setPath(article.getPath() + kebabCase.replace(".md", ""));
+            article1.setDisplayOrder(0);
+            articleService.saveArticle(article1);
+            return BaseResponse.ofSuccess("文章上传成功");
+        } catch (IllegalArgumentException e) {
+            log.warn(e.getMessage(), e);
+            return new BaseResponse(RespCodeEnum.PARAM_ERROR.getCode(), RespCodeEnum.PARAM_ERROR.getMessage());
+        } catch (Exception e) {
+            log.error("系统异常请联系管理员处理", e);
+            return new BaseResponse(RespCodeEnum.FAIL.getCode(), "系统异常请联系管理员处理");
+        }
+    }
 
     public ArticleService getArticleService() {
         return articleService;
