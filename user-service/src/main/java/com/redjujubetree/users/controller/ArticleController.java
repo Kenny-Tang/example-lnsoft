@@ -1,8 +1,10 @@
 package com.redjujubetree.users.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.redjujubetree.KStringUtils;
+import com.redjujubetree.common.CacheUtil;
 import com.redjujubetree.response.BaseResponse;
 import com.redjujubetree.response.RespCodeEnum;
 import com.redjujubetree.users.domain.dto.ArticleDTO;
@@ -29,7 +31,15 @@ public class ArticleController {
     @RequestMapping("/list" )
     public BaseResponse list() {
         try {
+            List<ArticleDTO> o = CacheUtil.get("/users/article/list");
+            if (o != null) {
+                log.info("从缓存中获取路由列表: {}", JSON.toJSONString(o));
+                return BaseResponse.ofSuccess(o);
+            }
             List<ArticleDTO> articleDTOList = articleService.queryUserArticleList();
+            if (CollectionUtil.isNotEmpty(articleDTOList)) {
+                CacheUtil.put("/users/article/list", articleDTOList, 60 * 10);
+            }
             return BaseResponse.ofSuccess(articleDTOList);
         } catch(IllegalArgumentException e){
             log.warn(e.getMessage(), e);
@@ -43,7 +53,15 @@ public class ArticleController {
     @RequestMapping("/homeView")
     public BaseResponse homeView(@RequestBody  HomeViewArticleQueryDTO query) {
         try {
+            Page<Article> o = CacheUtil.get(query.toString());
+            if (o != null) {
+                log.info("从缓存中获取首页文章列表: {}", JSON.toJSONString(o));
+                return BaseResponse.ofSuccess(o);
+            }
             Page<Article> articleDTOList = articleService.queryHomeView(query);
+            if (CollectionUtil.isNotEmpty(articleDTOList.getRecords())) {
+                CacheUtil.put(query.toString(), articleDTOList, 60 * 3);
+            }
             return BaseResponse.ofSuccess(articleDTOList);
         } catch(IllegalArgumentException e){
             log.warn(e.getMessage(), e);
