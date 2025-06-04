@@ -51,14 +51,16 @@ public class ArticleController {
     @RequestMapping("/homeView")
     public BaseResponse homeView(@RequestBody  HomeViewArticleQueryDTO query) {
         try {
-            Page<Article> o = CacheUtil.get(query.toString());
+            String key = query.key();
+            Page<Article> o = CacheUtil.get(key);
             if (o != null) {
                 log.info("从缓存中获取首页文章列表: {}", JSON.toJSONString(o));
                 return BaseResponse.ofSuccess(o);
             }
             Page<Article> articleDTOList = articleService.queryHomeView(query);
             if (CollectionUtil.isNotEmpty(articleDTOList.getRecords())) {
-                CacheUtil.put(query.toString(), articleDTOList, 60 * 3);
+
+                CacheUtil.put(key, articleDTOList, 60 * 20);
             }
             return BaseResponse.ofSuccess(articleDTOList);
         } catch(IllegalArgumentException e){
