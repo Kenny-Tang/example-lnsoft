@@ -40,16 +40,19 @@ public class UserVisitTraceController {
 				for (Cookie cookie : cookies) {
 					String token = cookie.getValue();
 					String name = cookie.getName();
-					System.out.println("Token from cookie: " + name + " : " + token);
+					log.info("Token from cookie: {} : {}", name, token);
 					if ("vId".equals(cookie.getName())) {
 						userVisitTrace.setClientId(cookie.getValue());
 					}
 				}
 			}
+			if ("2d362c1f5196fabc5de16164b1136e44".equals(userVisitTrace.getClientId()) || "127.0.0.1".equals(userVisitTrace.getRemoteAddr())){
+				return new BaseResponse(RespCodeEnum.SUCCESS.getCode(), RespCodeEnum.SUCCESS.getMessage());
+			}
 			userVisitTrace.setRemoteAddr(request.getRemoteAddr());
 			userVisitTrace.setRemotePort(request.getRemotePort());
 			userVisitTraceService.saveUserVisitTrace(userVisitTrace);
-			System.out.println(JSON.toJSONString(userVisitTrace));
+			log.info("保存用户访问记录: {}", JSON.toJSONString(userVisitTrace));
 			return new BaseResponse(RespCodeEnum.SUCCESS.getCode(), RespCodeEnum.SUCCESS.getMessage());
 		} catch(IllegalArgumentException e){
 			log.warn(e.getMessage(), e);

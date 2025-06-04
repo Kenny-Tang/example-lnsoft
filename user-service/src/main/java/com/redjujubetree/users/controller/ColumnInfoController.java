@@ -2,13 +2,19 @@ package com.redjujubetree.users.controller;
 
 import com.redjujubetree.response.BaseResponse;
 import com.redjujubetree.response.RespCodeEnum;
-import lombok.extern.slf4j.Slf4j;
-import lombok.Setter;
+import com.redjujubetree.users.domain.dto.ColumnDTO;
 import com.redjujubetree.users.domain.entity.ColumnInfo;
-import org.springframework.web.bind.annotation.RequestMapping;
 import com.redjujubetree.users.service.ColumnInfoService;
-import javax.annotation.Resource;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -31,6 +37,26 @@ public class ColumnInfoController {
 		try {
 			columnInfoService.saveColumnInfo(columnInfo);
 			return new BaseResponse(RespCodeEnum.SUCCESS.getCode(), RespCodeEnum.SUCCESS.getMessage());
+		} catch(IllegalArgumentException e){
+			log.warn(e.getMessage(), e);
+			return new BaseResponse(RespCodeEnum.PARAM_ERROR.getCode(), RespCodeEnum.PARAM_ERROR.getMessage());
+		} catch (Exception e) {
+			log.error("系统异常请联系管理员处理", e);
+			return new BaseResponse(RespCodeEnum.FAIL.getCode(), "系统异常请联系管理员处理");
+		}
+	}
+
+	@GetMapping("/list")
+	public BaseResponse list() {
+		try {
+			List<ColumnInfo> list = columnInfoService.list();
+			List<ColumnInfo> collect = list.stream().map(en -> {
+				ColumnDTO target = new ColumnDTO();
+				BeanUtils.copyProperties(en, target);
+				target.setId(en.getId().toString());
+				return en;
+			}).collect(Collectors.toList());
+			return BaseResponse.ofSuccess(collect);
 		} catch(IllegalArgumentException e){
 			log.warn(e.getMessage(), e);
 			return new BaseResponse(RespCodeEnum.PARAM_ERROR.getCode(), RespCodeEnum.PARAM_ERROR.getMessage());

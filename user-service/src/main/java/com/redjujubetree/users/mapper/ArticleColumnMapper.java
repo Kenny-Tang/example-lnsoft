@@ -1,7 +1,7 @@
 package com.redjujubetree.users.mapper;
 
-import com.redjujubetree.users.domain.entity.ArticleColumn;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.redjujubetree.users.domain.entity.ArticleColumn;
 
 /**
  * <p>
@@ -13,4 +13,19 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ArticleColumnMapper extends BaseMapper<ArticleColumn> {
 
+	default boolean saveArticleColumn(ArticleColumn en){
+		if (en.getId() == null) {
+			en.setId(com.redjujubetree.IdentifierGenerator.getDefaultGenerator().nextId());
+		}
+		if (en.getVersion() == null) {
+			en.setVersion(0);
+		}
+		if (en.getCreateTime() == null) {
+			en.setCreateTime(new java.util.Date());
+		}
+		if (en.getUpdateTime() == null) {
+			en.setUpdateTime(new java.util.Date());
+		}
+		return insert(en) > 0;
+	}
 }

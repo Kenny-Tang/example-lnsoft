@@ -3,7 +3,6 @@ package com.redjujubetree.users.controller;
 import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.redjujubetree.KStringUtils;
 import com.redjujubetree.common.CacheUtil;
 import com.redjujubetree.response.BaseResponse;
 import com.redjujubetree.response.RespCodeEnum;
@@ -12,7 +11,6 @@ import com.redjujubetree.users.domain.dto.param.HomeViewArticleQueryDTO;
 import com.redjujubetree.users.domain.entity.Article;
 import com.redjujubetree.users.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,14 +75,8 @@ public class ArticleController {
         try {
             log.info("上传文章文件: {}", articleFile.getOriginalFilename());
             log.info("文章信息: {}", JSON.toJSONString(article));
-            // articleService.saveArticle();
-            Article article1 = new Article();
-            BeanUtils.copyProperties(article, article1);
-            String kebabCase = KStringUtils.toKebabCase(articleFile.getOriginalFilename().replace(" ", ""));
-            article1.setUrl(article.getUrl()+ articleFile.getOriginalFilename());
-            article1.setPath(article.getPath() + kebabCase.replace(".md", ""));
-            article1.setDisplayOrder(0);
-            articleService.saveArticle(article1);
+
+            articleService.saveArticle(articleFile.getOriginalFilename(), article);
             return BaseResponse.ofSuccess("文章上传成功");
         } catch (IllegalArgumentException e) {
             log.warn(e.getMessage(), e);

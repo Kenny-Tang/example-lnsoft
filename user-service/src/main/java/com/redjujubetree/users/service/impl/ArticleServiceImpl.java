@@ -3,15 +3,19 @@ package com.redjujubetree.users.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.redjujubetree.KStringUtils;
 import com.redjujubetree.users.domain.dto.ArticleDTO;
 import com.redjujubetree.users.domain.dto.param.HomeViewArticleQueryDTO;
 import com.redjujubetree.users.domain.entity.Article;
+import com.redjujubetree.users.domain.entity.ArticleColumn;
 import com.redjujubetree.users.domain.entity.ColumnInfo;
+import com.redjujubetree.users.mapper.ArticleColumnMapper;
 import com.redjujubetree.users.mapper.ArticleMapper;
 import com.redjujubetree.users.mapper.ColumnInfoMapper;
 import com.redjujubetree.users.service.ArticleService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,13 +39,32 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
 	@Resource
 	private ColumnInfoMapper columnInfoMapper;
+	@Resource
+	private ArticleColumnMapper articleColumnMapper;
 
     @Transactional(rollbackFor = Throwable.class)
 	public void saveArticle(Article article) {
 		baseMapper.saveArticle(article);
 	}
 
-    public void updateArticleById(Article article) {
+	@Override
+	@Transactional(rollbackFor = Throwable.class)
+	public void saveArticle(String articleFile, ArticleDTO article) {
+		Article article1 = new Article();
+		BeanUtils.copyProperties(article, article1);
+		String kebabCase = KStringUtils.toKebabCase(articleFile.replace(" ", ""));
+		article1.setUrl(article.getUrl()+ articleFile);
+		article1.setPath(article.getPath() + kebabCase.replace(".md", ""));
+		saveArticle(article1);
+		if (Objects.nonNull(article.getColumnId())) {
+			ArticleColumn entity = new ArticleColumn();
+			entity.setArticleId(article1.getId());
+			entity.setColumnId(Long.valueOf(article.getColumnId()));
+			articleColumnMapper.saveArticleColumn(entity);
+		}
+	}
+
+	public void updateArticleById(Article article) {
         article.setUpdateTime(new Date());
         updateById(article);
     }
