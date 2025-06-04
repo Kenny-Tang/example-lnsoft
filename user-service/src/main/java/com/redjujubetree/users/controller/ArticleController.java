@@ -3,7 +3,9 @@ package com.redjujubetree.users.controller;
 import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.redjujubetree.SystemClock;
 import com.redjujubetree.common.CacheUtil;
+import com.redjujubetree.common.ThreadPoolUtil;
 import com.redjujubetree.response.BaseResponse;
 import com.redjujubetree.response.RespCodeEnum;
 import com.redjujubetree.users.domain.dto.ArticleDTO;
@@ -32,12 +34,13 @@ public class ArticleController {
             List<ArticleDTO> o = CacheUtil.get("/users/article/list");
             if (o != null) {
                 log.info("从缓存中获取路由列表: {}", JSON.toJSONString(o));
+                if (SystemClock.currentTimeMillis() % 100 > 90) {
+                    // 10% 的概率异步更新缓存
+                    ThreadPoolUtil.execute(() -> { getRouterList(); });
+                }
                 return BaseResponse.ofSuccess(o);
             }
-            List<ArticleDTO> articleDTOList = articleService.queryUserArticleList();
-            if (CollectionUtil.isNotEmpty(articleDTOList)) {
-                CacheUtil.put("/users/article/list", articleDTOList, 60 * 10);
-            }
+            List<ArticleDTO> articleDTOList = getRouterList();
             return BaseResponse.ofSuccess(articleDTOList);
         } catch(IllegalArgumentException e){
             log.warn(e.getMessage(), e);
@@ -48,6 +51,14 @@ public class ArticleController {
         }
     }
 
+    private List<ArticleDTO> getRouterList() {
+        List<ArticleDTO> articleDTOList = articleService.queryUserArticleList();
+        if (CollectionUtil.isNotEmpty(articleDTOList)) {
+            CacheUtil.put("/users/article/list", articleDTOList, 60 * 10);
+        }
+        return articleDTOList;
+    }
+
     @RequestMapping("/homeView")
     public BaseResponse homeView(@RequestBody  HomeViewArticleQueryDTO query) {
         try {
@@ -55,13 +66,13 @@ public class ArticleController {
             Page<Article> o = CacheUtil.get(key);
             if (o != null) {
                 log.info("从缓存中获取首页文章列表: {}", JSON.toJSONString(o));
+                if (SystemClock.currentTimeMillis() % 100 > 90) {
+                    // 10% 的概率异步更新缓存
+                    ThreadPoolUtil.execute(() -> { getArticlePage(query, key); });
+                }
                 return BaseResponse.ofSuccess(o);
             }
-            Page<Article> articleDTOList = articleService.queryHomeView(query);
-            if (CollectionUtil.isNotEmpty(articleDTOList.getRecords())) {
-
-                CacheUtil.put(key, articleDTOList, 60 * 20);
-            }
+            Page<Article> articleDTOList = getArticlePage(query, key);
             return BaseResponse.ofSuccess(articleDTOList);
         } catch(IllegalArgumentException e){
             log.warn(e.getMessage(), e);
@@ -70,6 +81,14 @@ public class ArticleController {
             log.error("系统异常请联系管理员处理", e);
             return new BaseResponse(RespCodeEnum.FAIL.getCode(), "系统异常请联系管理员处理");
         }
+    }
+
+    private Page<Article> getArticlePage(HomeViewArticleQueryDTO query, String key) {
+        Page<Article> articleDTOList = articleService.queryHomeView(query);
+        if (CollectionUtil.isNotEmpty(articleDTOList.getRecords())) {
+            CacheUtil.put(key, articleDTOList, 60 * 10);
+        }
+        return articleDTOList;
     }
 
     @PostMapping("")
