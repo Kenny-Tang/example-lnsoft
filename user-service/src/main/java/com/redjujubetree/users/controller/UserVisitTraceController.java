@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Set;
 
 /**
  * <p>
@@ -46,7 +47,9 @@ public class UserVisitTraceController {
 					}
 				}
 			}
-			if ("2d362c1f5196fabc5de16164b1136e44".equals(userVisitTrace.getClientId()) || "127.0.0.1".equals(userVisitTrace.getRemoteAddr())){
+			if (excludeClientIdSet.contains(userVisitTrace.getClientId())
+					|| "127.0.0.1".equals(userVisitTrace.getRemoteAddr()) // 本地测试时不记录访问日志
+			){
 				return new BaseResponse(RespCodeEnum.SUCCESS.getCode(), RespCodeEnum.SUCCESS.getMessage());
 			}
 			userVisitTrace.setRemoteAddr(request.getRemoteAddr());
@@ -61,5 +64,14 @@ public class UserVisitTraceController {
 			log.error("系统异常请联系管理员处理", e);
 			return new BaseResponse(RespCodeEnum.FAIL.getCode(), "系统异常请联系管理员处理");
 		}
+	}
+	public static Set<String> excludeClientIdSet;
+
+	static {
+		excludeClientIdSet = Set.of(
+				"cfc0b048baf82c459d4a2a9d407174fb",
+				"2d362c1f5196fabc5de16164b1136e44", // 我的电脑
+				"348b1a2bbc78407802b2f5242c6bd631"  // 我的手机
+		);
 	}
 }
