@@ -40,3 +40,5 @@ build/
 /deploy/user-service/org/
 deploy/api-gateway/api-gateway.jar
 deploy/user-service/user-service.jar
+/fs-service/08e8859d-161b-42b1-b498-3d9841070349.png
+/fs-service/sos.png

@@ -12,12 +12,12 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import java.sql.Types;
 import java.util.Scanner;
 
-public class CodeGenerator {
+public class FsServiceGenerator {
 	public static void main(String[] args) {
-		FastAutoGenerator.create("jdbc:mysql://47.113.144.60:7500/xiaozaoshu?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8", "root", "1234Qwer")
+		FastAutoGenerator.create("jdbc:sqlite:/Users/kenny/Library/DBeaverData/workspace6/.metadata/sample-database-sqlite-1/Chinook.db", "root", "1234Qwer")
 				.globalConfig(builder ->
 					builder.author("tanjianwei") // 设置作者
-							.outputDir(System.getProperty("user.dir") + "/user-service/src/main/java") // 设置输出路径
+							.outputDir(System.getProperty("user.dir") + "/fs-service/src/main/java") // 设置输出路径
 							.dateType(DateType.ONLY_DATE)// 设置时间策略
 							.disableOpenDir() // 禁止打开输出目录
 				)
@@ -27,6 +27,10 @@ public class CodeGenerator {
 							if (typeCode == Types.SMALLINT) {
 								// 自定义类型转换
 								return DbColumnType.INTEGER;
+							}
+							if (metaInfo.getColumnName().endsWith("_id") || metaInfo.getColumnName().endsWith("Id")) {
+								// 如果是以_id结尾的字段，转换为Long类型
+								return DbColumnType.LONG;
 							}
 							String rawType = metaInfo.getTypeName().toUpperCase(); // SQLite原始字段类型
 
@@ -39,11 +43,11 @@ public class CodeGenerator {
 				)
 				.packageConfig(builder ->
 						builder.parent("com.redjujubetree") // 设置父包名
-								.moduleName("users") // 设置父包模块名
+								.moduleName("fs") // 设置父包模块名
 								.entity("domain.entity") // 设置实体类包名
 				)
 				.strategyConfig(builder ->
-						builder.addInclude("article") // 设置需要生成的表名
+						builder.addInclude("file_storage") // 设置需要生成的表名
 								.serviceBuilder()
 //								.enableFileOverride() // 设置service接口覆盖文件
 								.convertServiceFileName((entityName -> entityName + ConstVal.SERVICE))

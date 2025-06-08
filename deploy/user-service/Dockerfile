@@ -1,5 +1,5 @@
-    # 使用官方 OpenJDK 运行时镜像
-    FROM openjdk:17-jdk-alpine
+    # 使用 JDK 运行时镜像
+    FROM eclipse-temurin:17-jdk
 
     # 设置工作目录
     WORKDIR /app

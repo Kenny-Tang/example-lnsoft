@@ -26,6 +26,7 @@
 		<module>common</module>
         <module>lnsoft-cloud-ztbgl</module>
         <module>api-gateway</module>
+		<module>fs-service</module>
 	</modules>
 	<scm>
 		<connection/>

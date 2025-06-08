@@ -38,6 +38,17 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.41.2.1</version> <!-- 请检查是否为最新版本 -->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version> <!-- 可以换成别的版本 -->
@@ -63,17 +74,20 @@
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
             <version>3.1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
             <version>3.1.0</version>
+            <scope>provided</scope>
         </dependency>
         <!-- slf4j 接口 -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.36</version> <!-- 这里可以换成你需要的版本 -->
+            <scope>provided</scope>
         </dependency>
 
         <!-- logback 实现 -->
@@ -81,6 +95,7 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.11</version> <!-- 这里可以换成你需要的版本 -->
+            <scope>provided</scope>
         </dependency>
 
         <!-- 可选的 logback-core，如果需要单独使用 core 功能 -->
@@ -88,6 +103,7 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <version>1.2.11</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
