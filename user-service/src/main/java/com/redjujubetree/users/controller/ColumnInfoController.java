@@ -50,11 +50,11 @@ public class ColumnInfoController {
 	public BaseResponse list() {
 		try {
 			List<ColumnInfo> list = columnInfoService.list();
-			List<ColumnInfo> collect = list.stream().map(en -> {
+			List<ColumnDTO> collect = list.stream().map(en -> {
 				ColumnDTO target = new ColumnDTO();
 				BeanUtils.copyProperties(en, target);
 				target.setId(en.getId().toString());
-				return en;
+				return target;
 			}).collect(Collectors.toList());
 			return BaseResponse.ofSuccess(collect);
 		} catch(IllegalArgumentException e){

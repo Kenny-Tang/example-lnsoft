@@ -122,9 +122,23 @@
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>3.4.0</version>
                 <configuration>
+                    <from>
+                        <image>eclipse-temurin:17-jdk</image>
+                    </from>
                     <to>
-                        <image>${docker.image.prefix}/${project.artifactId}</image>
+                        <image>crpi-dvladtsekkyimikp.cn-heyuan.personal.cr.aliyuncs.com/xiaozaoshu/user-service</image>
+                        <tags>
+                            <tag>${project.version}</tag>
+                            <tag>latest</tag>
+                        </tags>
                     </to>
+                    <container>
+                        <mainClass>com.redjujubetree.ExampleApplication</mainClass>
+                        <ports>
+                            <port>8081</port>
+                        </ports>
+                    </container>
+                    <allowInsecureRegistries>true</allowInsecureRegistries>
                 </configuration>
             </plugin>
         </plugins>

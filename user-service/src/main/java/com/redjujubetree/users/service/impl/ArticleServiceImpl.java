@@ -53,8 +53,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 		Article article1 = new Article();
 		BeanUtils.copyProperties(article, article1);
 		String kebabCase = KStringUtils.toKebabCase(articleFile.replace(" ", ""));
-		article1.setUrl(article.getUrl()+ articleFile);
-		article1.setPath(article.getPath() + kebabCase.replace(".md", ""));
+		if ("/articles/".equals(article.getUrl())) {
+			article1.setUrl(article.getUrl()+ articleFile);
+		}
+		if ("/articles/".equals(article.getPath())) {
+			article1.setPath(article.getPath() + kebabCase.replace(".md", ""));
+		}
 		saveArticle(article1);
 		if (Objects.nonNull(article.getColumnId())) {
 			ArticleColumn entity = new ArticleColumn();
