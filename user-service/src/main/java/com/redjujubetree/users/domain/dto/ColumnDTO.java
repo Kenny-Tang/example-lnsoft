@@ -21,4 +21,9 @@ public class ColumnDTO {
 	 */
 	private String title;
 
+	/**
+	 * 专栏封面
+	 */
+	private String cover;
+
 }

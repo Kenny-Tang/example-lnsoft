@@ -66,7 +66,7 @@ public class ArticleServiceTest {
     public void testHomeView() {
         // 测试首页文章
         HomeViewArticleQueryDTO query = new HomeViewArticleQueryDTO();
-        Page<Article> articleDTOS = articleService.queryHomeView(query);
+        Page<ArticleDTO> articleDTOS = articleService.queryHomeView(query);
         System.out.println(JSON.toJSONString(articleDTOS));
         query.setPageNum(2);
         articleDTOS = articleService.queryHomeView(query);

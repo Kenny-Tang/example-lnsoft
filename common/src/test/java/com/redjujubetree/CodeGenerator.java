@@ -43,7 +43,7 @@ public class CodeGenerator {
 								.entity("domain.entity") // 设置实体类包名
 				)
 				.strategyConfig(builder ->
-						builder.addInclude("article") // 设置需要生成的表名
+						builder.addInclude("column_info") // 设置需要生成的表名
 								.serviceBuilder()
 //								.enableFileOverride() // 设置service接口覆盖文件
 								.convertServiceFileName((entityName -> entityName + ConstVal.SERVICE))

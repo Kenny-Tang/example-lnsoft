@@ -1,5 +1,7 @@
 package com.redjujubetree.users.domain.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
@@ -10,13 +12,14 @@ import java.util.Date;
  * </p>
  *
  * @author tanjianwei
- * @since 2025-05-15
+ * @since 2025-06-09
  */
 @TableName("column_info")
 public class ColumnInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private Date updateTime;
@@ -44,6 +47,11 @@ public class ColumnInfo implements Serializable {
      * 展示次序
      */
     private Integer displayOrder;
+
+    /**
+     * 专栏封面
+     */
+    private String cover;
 
     public Long getId() {
         return id;
@@ -109,6 +117,14 @@ public class ColumnInfo implements Serializable {
         this.displayOrder = displayOrder;
     }
 
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
     @Override
     public String toString() {
         return "ColumnInfo{" +
@@ -120,6 +136,7 @@ public class ColumnInfo implements Serializable {
             ", icon = " + icon +
             ", title = " + title +
             ", displayOrder = " + displayOrder +
+            ", cover = " + cover +
         "}";
     }
 }

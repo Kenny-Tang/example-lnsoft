@@ -10,7 +10,6 @@ import com.redjujubetree.response.BaseResponse;
 import com.redjujubetree.response.RespCodeEnum;
 import com.redjujubetree.users.domain.dto.ArticleDTO;
 import com.redjujubetree.users.domain.dto.param.HomeViewArticleQueryDTO;
-import com.redjujubetree.users.domain.entity.Article;
 import com.redjujubetree.users.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +62,7 @@ public class ArticleController {
     public BaseResponse homeView(@RequestBody  HomeViewArticleQueryDTO query) {
         try {
             String key = query.key();
-            Page<Article> o = CacheUtil.get(key);
+            Page o = CacheUtil.get(key);
             if (o != null) {
                 log.info("从缓存中获取首页文章列表: {}", JSON.toJSONString(o));
                 if (SystemClock.currentTimeMillis() % 100 > 90) {
@@ -72,7 +71,7 @@ public class ArticleController {
                 }
                 return BaseResponse.ofSuccess(o);
             }
-            Page<Article> articleDTOList = getArticlePage(query, key);
+            Page articleDTOList = getArticlePage(query, key);
             return BaseResponse.ofSuccess(articleDTOList);
         } catch(IllegalArgumentException e){
             log.warn(e.getMessage(), e);
@@ -83,12 +82,12 @@ public class ArticleController {
         }
     }
 
-    private Page<Article> getArticlePage(HomeViewArticleQueryDTO query, String key) {
-        Page<Article> articleDTOList = articleService.queryHomeView(query);
-        if (CollectionUtil.isNotEmpty(articleDTOList.getRecords())) {
-            CacheUtil.put(key, articleDTOList, 60 * 10);
+    private Page getArticlePage(HomeViewArticleQueryDTO query, String key) {
+        Page<ArticleDTO> articlePage = articleService.queryHomeView(query);
+        if (CollectionUtil.isNotEmpty(articlePage.getRecords())) {
+            CacheUtil.put(key, articlePage, 60 * 10);
         }
-        return articleDTOList;
+        return articlePage;
     }
 
     @PostMapping("")

@@ -1,6 +1,7 @@
 package com.redjujubetree.users.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.redjujubetree.KStringUtils;
@@ -106,10 +107,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 		return results;
 	}
 
-	public Page<Article> queryHomeView(HomeViewArticleQueryDTO query) {
-		Page<Article> articlePage = baseMapper.getArticlePage(query);
-		return  articlePage;
+	public Page<ArticleDTO> queryHomeView(HomeViewArticleQueryDTO query) {
+		query.setNotPath("/");
+		Page<ArticleDTO> articleDTOPage = baseMapper.queryArticlePage(new Page<>(query.getPageNum(), query.getPageSize()), query);
+		List<ColumnInfo> columnInfos = columnInfoMapper.selectList(Wrappers.lambdaQuery());
+		Map<String, ColumnInfo> collect = columnInfos.stream()
+				.collect(Collectors.toMap(t -> String.valueOf(t.getId()), Function.identity()));
+		articleDTOPage.getRecords().forEach(t -> {
+			if (Objects.nonNull(t.getColumnId())) {
+				ColumnInfo columnInfo = collect.get(t.getColumnId());
+				if (Objects.nonNull(columnInfo)) {
+					t.setCover(columnInfo.getCover());
+				}
+			}
+		});
+		return  articleDTOPage;
 	}
-
 
 }

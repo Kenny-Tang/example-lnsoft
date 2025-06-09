@@ -24,7 +24,7 @@ public interface ArticleService extends IService<Article> {
 
     List<ArticleDTO> queryUserArticleList();
 
-    Page<Article> queryHomeView(HomeViewArticleQueryDTO query);
+    Page<ArticleDTO> queryHomeView(HomeViewArticleQueryDTO query);
 
 	void saveArticle(String originalFilename, ArticleDTO article);
 }
