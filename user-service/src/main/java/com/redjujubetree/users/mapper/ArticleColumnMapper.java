@@ -1,6 +1,7 @@
 package com.redjujubetree.users.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.redjujubetree.users.domain.entity.ArticleColumn;
 
 /**
@@ -27,5 +28,14 @@ public interface ArticleColumnMapper extends BaseMapper<ArticleColumn> {
 			en.setUpdateTime(new java.util.Date());
 		}
 		return insert(en) > 0;
+	}
+
+	default int updateArticleColumn(Long articleId, Long columnId) {
+		if (articleId == null) return 0;
+		if (columnId == null) return 0;
+		ArticleColumn articleColumn = selectOne(Wrappers.lambdaQuery(ArticleColumn.class).eq(ArticleColumn::getArticleId, articleId));
+		if (articleColumn == null) return 0;
+		articleColumn.setColumnId(columnId);
+		return updateById(articleColumn);
 	}
 }

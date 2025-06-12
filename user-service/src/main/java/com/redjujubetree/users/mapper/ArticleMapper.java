@@ -39,6 +39,4 @@ public interface ArticleMapper extends BaseMapper<Article> {
 		}
 		return insert(article) > 0;
 	}
-
-
 }

@@ -48,21 +48,13 @@ public class ColumnInfoController {
 
 	@GetMapping("/list")
 	public BaseResponse list() {
-		try {
-			List<ColumnInfo> list = columnInfoService.list();
-			List<ColumnDTO> collect = list.stream().map(en -> {
-				ColumnDTO target = new ColumnDTO();
-				BeanUtils.copyProperties(en, target);
-				target.setId(en.getId().toString());
-				return target;
-			}).collect(Collectors.toList());
-			return BaseResponse.ofSuccess(collect);
-		} catch(IllegalArgumentException e){
-			log.warn(e.getMessage(), e);
-			return new BaseResponse(RespCodeEnum.PARAM_ERROR.getCode(), RespCodeEnum.PARAM_ERROR.getMessage());
-		} catch (Exception e) {
-			log.error("系统异常请联系管理员处理", e);
-			return new BaseResponse(RespCodeEnum.FAIL.getCode(), "系统异常请联系管理员处理");
-		}
+		List<ColumnInfo> list = columnInfoService.list();
+		List<ColumnDTO> collect = list.stream().map(en -> {
+			ColumnDTO target = new ColumnDTO();
+			BeanUtils.copyProperties(en, target);
+			target.setId(en.getId().toString());
+			return target;
+		}).collect(Collectors.toList());
+		return BaseResponse.ofSuccess(collect);
 	}
 }

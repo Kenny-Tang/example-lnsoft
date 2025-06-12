@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.redjujubetree.IdentifierGenerator;
 import com.redjujubetree.KStringUtils;
+import com.redjujubetree.response.BaseResponse;
+import com.redjujubetree.users.controller.ArticleController;
 import com.redjujubetree.users.domain.dto.ArticleDTO;
 import com.redjujubetree.users.domain.dto.param.HomeViewArticleQueryDTO;
 import com.redjujubetree.users.domain.entity.Article;
@@ -32,6 +34,8 @@ public class ArticleServiceTest {
     private ColumnInfoService columnInfoService;
     @Resource
     private ArticleColumnService articleColumnService;
+    @Resource
+    private ArticleController articleController;
 
     @Test
     public void testSaveArticle() {
@@ -112,5 +116,15 @@ public class ArticleServiceTest {
             return entity;
         }
         return one;
+    }
+
+
+    @Test
+    public void updateArticle() {
+        BaseResponse baseResponse = articleController.queryById(710879483208421378L);
+        ArticleDTO data = (ArticleDTO)baseResponse.getData();
+        data.setSummary("密集读写情况下磁盘对性能的影响");
+        data.setColumnId("710879488908480513");
+        articleService.updateArticleById(data);
     }
 }

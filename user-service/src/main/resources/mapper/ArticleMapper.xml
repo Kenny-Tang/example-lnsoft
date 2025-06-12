@@ -5,7 +5,7 @@
 <mapper namespace="com.redjujubetree.users.mapper.ArticleMapper">
 
     <sql id="articleColumns">
-        select t.id, ac.column_id, t.`path`, t.component, t.create_time, t.icon, t.title, t.url, t.summary, t.display_order
+        select t.id, ac.column_id, t.`path`, t.component, t.create_time,t.update_time, t.icon, t.title, t.url, t.summary, t.display_order
         from article t
         left join article_column ac on t.id = ac.article_id
         where 1=1

@@ -39,4 +39,8 @@ public class CacheUtil {
 		}
 		return (T) entry.value;
 	}
+
+	public static void removeKeyPrefix(String keyPattern) {
+		cache.keySet().removeIf(key -> key.startsWith(keyPattern));
+	}
 }

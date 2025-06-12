@@ -1,10 +1,12 @@
 package com.redjujubetree.users.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.redjujubetree.KStringUtils;
+import com.redjujubetree.users.domain.bo.ArticleBO;
 import com.redjujubetree.users.domain.dto.ArticleDTO;
 import com.redjujubetree.users.domain.dto.param.HomeViewArticleQueryDTO;
 import com.redjujubetree.users.domain.entity.Article;
@@ -69,10 +71,26 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 		}
 	}
 
-	public void updateArticleById(Article article) {
-        article.setUpdateTime(new Date());
-        updateById(article);
-    }
+	public void updateArticleById(ArticleDTO dto) {
+		Article article1 = baseMapper.selectById(dto.getId());
+		BeanUtils.copyProperties(dto, article1);
+		article1.setUpdateTime(new Date());
+		baseMapper.updateById(article1);
+		articleColumnMapper.updateArticleColumn(article1.getId(), Long.valueOf(dto.getColumnId()));
+	}
+
+	public ArticleBO getArticleById(Long id) {
+		ArticleBO articleBO = new ArticleBO();
+		Article article = baseMapper.selectById(id);
+		articleBO.setArticle(article);
+		LambdaQueryWrapper<ArticleColumn> queryWrapper = Wrappers.lambdaQuery(ArticleColumn.class).eq(ArticleColumn::getArticleId, article.getId());
+		ArticleColumn articleColumn = articleColumnMapper.selectOne(queryWrapper);
+		if (articleColumn != null) {
+			ColumnInfo columnInfo = columnInfoMapper.selectById(articleColumn.getColumnId());
+			articleBO.setColumn(columnInfo);
+		}
+		return articleBO;
+	}
 
 	@Override
 	public List<ArticleDTO> queryUserArticleList() {
