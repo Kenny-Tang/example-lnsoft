@@ -55,10 +55,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
             <version>2.0.30</version> <!-- 推荐最新 -->
@@ -87,7 +83,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.36</version> <!-- 这里可以换成你需要的版本 -->
-            <scope>provided</scope>
         </dependency>
 
         <!-- logback 实现 -->

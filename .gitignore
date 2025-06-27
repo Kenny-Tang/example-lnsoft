@@ -8,6 +8,8 @@ target/
 
 /logs/
 
+/merge-pdf-files/
+
 ### STS ###
 .apt_generated
 .classpath
@@ -42,3 +44,7 @@ deploy/api-gateway/api-gateway.jar
 deploy/user-service/user-service.jar
 /fs-service/08e8859d-161b-42b1-b498-3d9841070349.png
 /fs-service/sos.png
+.DS_Store
+.DS_Store
+lnsoft-cloud-ztbgl/src/main/resources/MakeCatalogController.java
+lnsoft-cloud-ztbgl/src/main/resources/SpireDocUtil.jav

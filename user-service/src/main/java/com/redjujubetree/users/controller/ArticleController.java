@@ -87,25 +87,17 @@ public class ArticleController {
 
     @RequestMapping("/homeView")
     public BaseResponse homeView(@RequestBody  HomeViewArticleQueryDTO query) {
-        try {
-            Page o = CacheUtil.get(query.key());
-            if (o != null) {
-                log.info("从缓存中获取首页文章列表: {}", JSON.toJSONString(o));
-                if (SystemClock.currentTimeMillis() % 100 > 80) {
-                    // 10% 的概率异步更新缓存
-                    ThreadPoolUtil.execute(() -> { getArticlePage(query); });
-                }
-                return BaseResponse.ofSuccess(o);
+        Page o = CacheUtil.get(query.key());
+        if (o != null) {
+            log.info("从缓存中获取首页文章列表: {}", JSON.toJSONString(o));
+            if (SystemClock.currentTimeMillis() % 100 > 80) {
+                // 10% 的概率异步更新缓存
+                ThreadPoolUtil.execute(() -> { getArticlePage(query); });
             }
-            Page articleDTOList = getArticlePage(query);
-            return BaseResponse.ofSuccess(articleDTOList);
-        } catch(IllegalArgumentException e){
-            log.warn(e.getMessage(), e);
-            return new BaseResponse(RespCodeEnum.PARAM_ERROR.getCode(), RespCodeEnum.PARAM_ERROR.getMessage());
-        } catch (Exception e) {
-            log.error("系统异常请联系管理员处理", e);
-            return new BaseResponse(RespCodeEnum.FAIL.getCode(), "系统异常请联系管理员处理");
+            return BaseResponse.ofSuccess(o);
         }
+        Page articleDTOList = getArticlePage(query);
+        return BaseResponse.ofSuccess(articleDTOList);
     }
 
     private Page getArticlePage(HomeViewArticleQueryDTO query) {

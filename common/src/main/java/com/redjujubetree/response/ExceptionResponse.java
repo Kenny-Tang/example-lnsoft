@@ -1,8 +1,6 @@
 package com.redjujubetree.response;
 
 public class ExceptionResponse extends BaseResponse{
-    private int code;
-    private String message;
     private String path;
     private String timestamp;
     public ExceptionResponse(int code, String message) {
@@ -20,26 +18,6 @@ public class ExceptionResponse extends BaseResponse{
 
     private static String now() {
         return java.time.LocalDateTime.now().toString();
-    }
-
-    @Override
-    public int getCode() {
-        return code;
-    }
-
-    @Override
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    @Override
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public String getPath() {

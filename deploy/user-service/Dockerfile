@@ -1,5 +1,5 @@
     # 使用 JDK 运行时镜像
-    FROM eclipse-temurin:17-jdk
+    FROM eclipse-temurin:8-jdk
 
     # 设置工作目录
     WORKDIR /app

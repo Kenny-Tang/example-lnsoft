@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class CacheUtil {
+	private static Boolean cacheEnabled = false;
 	static class Entry {
 		Object value;
 		long expireAt;
@@ -14,7 +15,7 @@ public class CacheUtil {
 	private static final ConcurrentHashMap<String, Entry> cache = new ConcurrentHashMap<>();
 
 	public static void put(String key, Object value, long ttl) {
-		put(key, value, ttl, TimeUnit.SECONDS);
+		put(key, value, ttl, TimeUnit.HOURS);
 	}
 
 	public static void put(String key, Object value, long ttl, TimeUnit unit) {
@@ -32,6 +33,9 @@ public class CacheUtil {
 	}
 
 	public static  <T> T get(String key) {
+		if (!cacheEnabled) {
+			return null; // Cache is disabled
+		}
 		Entry entry = cache.get(key);
 		if (entry == null || System.currentTimeMillis() > entry.expireAt) {
 			cache.remove(key);
