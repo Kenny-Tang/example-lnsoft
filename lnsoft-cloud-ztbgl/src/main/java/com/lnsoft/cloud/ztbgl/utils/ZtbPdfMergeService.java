@@ -1,6 +1,10 @@
 package com.lnsoft.cloud.ztbgl.utils;
 
 import cn.hutool.core.collection.ListUtil;
+import com.jacob.activeX.ActiveXComponent;
+import com.jacob.com.ComThread;
+import com.jacob.com.Dispatch;
+import com.jacob.com.Variant;
 import com.lnsoft.cloud.ztbgl.utils.pdf.MergeConfig;
 import com.lnsoft.cloud.ztbgl.utils.pdf.PageNumberFormatter;
 import com.lnsoft.cloud.ztbgl.utils.pdf.PdfFileEntry;
@@ -35,8 +39,65 @@ public class ZtbPdfMergeService {
 		this.config = new ZtbPdfMergeConfig(fontPath);
 	}
 
-	public void wordToPdf(File docx) {
+	public  void word2pf(String inputFile, String outputFile) {
+		ActiveXComponent app = null;
+		Dispatch doc = null;
+		try {
+			// 创建 WPS 应用对象
+			// 优先尝试启动 Microsoft Word
+			try {
+				app = new ActiveXComponent("Word.Application");
+				System.out.println("使用 Microsoft Word 进行转换");
+			} catch (Exception e) {
+				// 如果 Word 不可用，尝试 WPS
+				System.out.println("Microsoft Word 未安装，尝试使用 WPS...");
+				try {
+					app = new ActiveXComponent("KWPS.Application");
+					System.out.println("使用 WPS Office 进行转换");
+				} catch (Exception ex) {
+					throw new RuntimeException("未检测到 Word 或 WPS 安装！");
+				}
+			}
 
+			// 显示或隐藏 WPS（false 为隐藏）工程图
+			app.setProperty("Visible", new Variant(false));
+			app.setProperty("AutomationSecurity", new Variant(3));
+
+			// 获取 Documents 集合
+			Dispatch docs = app.getProperty("Documents").toDispatch();
+
+			// 打开文档，参数：文件路径，是否只读
+			doc = Dispatch.call(docs, "Open", inputFile, false, true).toDispatch();
+
+			// Dispatch.call(doc, "ExportAsFixedFormat", outputFile, wdFormatPDF);
+			Dispatch.call(doc, "ExportAsFixedFormat",
+					outputFile,
+					new Variant(17),   // wdExportFormatPDF
+					new Variant(false), // OpenAfterExport
+					new Variant(1),     // OptimizeFor
+					new Variant(0),     // Range
+					new Variant(1),     // From page
+					new Variant(1),     // To page
+					new Variant(0),     // Item
+					new Variant(true),  // IncludeDocProps
+					new Variant(true),  // KeepIRM
+					new Variant(1),     // CreateBookmarks: 0=None, 1=Headings, 2=Bookmarks
+					new Variant(true),  // DocStructureTags
+					new Variant(true),  // BitmapMissingFonts
+					new Variant(false)  // UseISO19005_1
+			);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (doc != null) {
+				Dispatch.call(doc, "Close", false);
+			}
+			if (app != null) {
+				app.invoke("Quit", 0);
+			}
+			ComThread.Release();
+		}
 	}
 
 	public void merge(List<PdfFileEntry> entries, File file) {

@@ -8,8 +8,5 @@ public class NotifyCenter {
 	public static NotifyCenter getInstance() {
 		return INSTANCE;
 	}
-
-	public void publish(NotifyEvent event) {
-
-	}
+    
 }
