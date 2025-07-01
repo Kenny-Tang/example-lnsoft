@@ -17,6 +17,7 @@ public class ZtbPdfMergeServiceTest {
 
 		Word2PdfParam param = new Word2PdfParam();
 		List<FileEntry> catalogEntries = CatalogBuilder.buildCatalog(CatalogBuilder.files, FileTypes.DOCX);
+
 		for (FileEntry catalogEntry : catalogEntries) {
 			param.setInputFile(catalogEntry.getFile().getAbsolutePath());
 			File outputFile = new File(param.getInputFile().substring(0, param.getInputFile().length() - 5) + ".pdf");
@@ -25,14 +26,15 @@ public class ZtbPdfMergeServiceTest {
 			}
 			param.setOutputFile(outputFile.getAbsolutePath());
 
-			long l = System.currentTimeMillis() % 10;
-			if (l > 5) {
-				param.setBookmarkPath("一级目录");
-			} else if (l > 3) {
-				param.setBookmarkPath("一级目录/二级目录");
+			long l = System.currentTimeMillis() % 100;
+			if (l > 70) {
+				param.setBookmarkPath("一级目录%s".formatted(l%5));
+			} else if (l > 30) {
+				param.setBookmarkPath("一级目录%s/二级目录%s".formatted(l%5, l%3));
 			} else {
-				param.setBookmarkPath("一级目录/二级目录/三级目录");
+				param.setBookmarkPath("一级目录%s/二级目录%s/三级目录".formatted(l%5, l%3));
 			}
+
 			ztbPdfMergeService.word2pf(param);
 		}
 

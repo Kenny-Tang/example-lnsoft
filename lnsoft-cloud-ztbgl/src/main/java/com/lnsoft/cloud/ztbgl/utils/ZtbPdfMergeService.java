@@ -42,22 +42,32 @@ public class ZtbPdfMergeService {
 			try (PDDocument document = PDDocument.load(new BufferedInputStream(new FileInputStream(param.getOutputFile())))){
 
 				PDDocumentOutline outlines = new PDDocumentOutline();
-
-				String[] split = param.getBookmarkPath().split(Constants.FILE_SEPARATOR_UNIX);
-				PDOutlineItem outlineItem = new PDOutlineItem();
-				outlines.addFirst(outlineItem);
-				outlineItem.setTitle(split[0]);
-				for (int i = 1; i < split.length; i++) {
-					PDOutlineItem item = new PDOutlineItem();
-					item.setTitle(split[i]);
-					outlineItem.addLast(item);
-					outlineItem = item;
-				}
 				PDDocumentCatalog documentCatalog = document.getDocumentCatalog();
-				PDOutlineItem pdOutlineItem = new PDOutlineItem();
-				pdOutlineItem.setTitle(new File(param.getOutputFile()).getName().replace(FileTypes.PDF.getSuffix(), ""));
-				outlineItem.addLast(pdOutlineItem);
 				documentCatalog.setDocumentOutline(outlines);
+
+				PDPageFitDestination destination = new PDPageFitDestination();
+				destination.setPage(document.getPage(0));
+				
+				String[] split = param.getBookmarkPath().split(Constants.FILE_SEPARATOR_UNIX);
+				PDOutlineItem parent = null;
+				for (String s : split) {
+					PDOutlineItem bookmark = new PDOutlineItem();
+					bookmark.setTitle(s);
+					bookmark.setDestination(destination);
+					if (parent != null) {
+						parent.addLast(bookmark);
+						parent = bookmark;
+					} else {
+						parent = bookmark;
+						outlines.addLast(parent);
+					}
+				}
+				
+				PDOutlineItem fileItem = new PDOutlineItem();
+				fileItem.setTitle(new File(param.getOutputFile()).getName().replace(FileTypes.PDF.getSuffix(), ""));
+				fileItem.setDestination(destination);
+				parent.addLast(fileItem);
+
 				outlines.openNode();
 				document.save(new File(param.getOutputFile()));
 			} catch (IOException e) {
@@ -102,7 +112,7 @@ public class ZtbPdfMergeService {
 					outputFile,
 					new Variant(17),   // wdExportFormatPDF
 					new Variant(false), // OpenAfterExport
-					new Variant(1),     // OptimizeFor
+					new Variant(0),     // OptimizeFor
 					new Variant(0),     // Range
 					new Variant(1),     // From page
 					new Variant(1),     // To page
