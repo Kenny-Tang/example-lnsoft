@@ -10,6 +10,7 @@ import java.util.List;
 public class CatalogBuilder {
     // static String inputDirPath = "/Users/kenny/Documents/鲁软/技术/山东方振新材料有限公司/";
     static String inputDirPath = "E:/山东方振新材料有限公司/";
+//    static String inputDirPath = "Z:\\文稿\\鲁软\\技术\\山东方振新材料有限公司";
 
     static String[] files = (
             "封面\n" +
