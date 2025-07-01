@@ -23,6 +23,7 @@
 	<modules>
 		<module>example-algorithm</module>
 		<module>user-service</module>
+		<module>qmt-service</module>
 		<module>common</module>
         <module>lnsoft-cloud-ztbgl</module>
         <module>api-gateway</module>
@@ -37,6 +38,7 @@
 	<properties>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<docker.image.prefix>springboot</docker.image.prefix>
 		<skywalking.version>9.0.0</skywalking.version>
 		<spring-cloud.version>2021.0.9</spring-cloud.version>
