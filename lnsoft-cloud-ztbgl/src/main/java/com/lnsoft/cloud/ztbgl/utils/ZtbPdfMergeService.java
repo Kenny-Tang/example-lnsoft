@@ -350,12 +350,14 @@ public class ZtbPdfMergeService {
 			link.setRectangle(linkBounds);
 			link.setBorderStyle(new PDBorderStyleDictionary());
 			PDPageFitDestination dest = new PDPageFitDestination();
-			dest.setPage(outputDoc.getPage(targetPage - 1));
-			PDActionGoTo action = new PDActionGoTo();
-			action.setDestination(dest);
-			link.setAction(action);
-			tocPage.getAnnotations().add(link);
-
+			int pageIndex = targetPage - 1;
+			if (pageIndex > 0) {
+				dest.setPage(outputDoc.getPage(pageIndex));
+				PDActionGoTo action = new PDActionGoTo();
+				action.setDestination(dest);
+				link.setAction(action);
+				tocPage.getAnnotations().add(link);
+			}
 			y -= lineHeight;
 		}
 		stream.close();

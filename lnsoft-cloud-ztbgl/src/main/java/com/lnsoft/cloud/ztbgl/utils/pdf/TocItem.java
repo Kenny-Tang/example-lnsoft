@@ -1,5 +1,6 @@
 package com.lnsoft.cloud.ztbgl.utils.pdf;
 
+import com.lnsoft.cloud.ztbgl.common.constant.Constants;
 import lombok.Data;
 import org.apache.pdfbox.pdmodel.PDPage;
 
@@ -30,6 +31,6 @@ public  class TocItem {
         if (Objects.isNull(parent)) {
             return title;
         }
-        return parent.key() + " > " + title; // 返回完整路径
+        return parent.key() + Constants.FILE_SEPARATOR_UNIX + title; // 返回完整路径
     }
 }
