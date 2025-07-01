@@ -1,17 +1,18 @@
 package com.lnsoft.cloud.ztbgl.utils;
 
 import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.lang.Assert;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.ComThread;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
-import com.lnsoft.cloud.ztbgl.utils.pdf.MergeConfig;
-import com.lnsoft.cloud.ztbgl.utils.pdf.PageNumberFormatter;
-import com.lnsoft.cloud.ztbgl.utils.pdf.PdfFileEntry;
-import com.lnsoft.cloud.ztbgl.utils.pdf.TocItem;
+import com.lnsoft.cloud.ztbgl.common.constant.Constants;
+import com.lnsoft.cloud.ztbgl.common.constant.FileTypes;
+import com.lnsoft.cloud.ztbgl.utils.pdf.*;
 import lombok.Data;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -25,10 +26,7 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPa
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class ZtbPdfMergeService {
@@ -38,8 +36,38 @@ public class ZtbPdfMergeService {
 	public ZtbPdfMergeService(String fontPath) {
 		this.config = new ZtbPdfMergeConfig(fontPath);
 	}
+	public  void word2pf(Word2PdfParam param) {
+		boolean ok = word2pf(param.getInputFile(), param.getOutputFile());
+		if (ok) {
+			try (PDDocument document = PDDocument.load(new BufferedInputStream(new FileInputStream(param.getOutputFile())))){
 
-	public  void word2pf(String inputFile, String outputFile) {
+				PDDocumentOutline outlines = new PDDocumentOutline();
+
+				String[] split = param.getBookmarkPath().split(Constants.FILE_SEPARATOR_UNIX);
+				PDOutlineItem outlineItem = new PDOutlineItem();
+				outlines.addFirst(outlineItem);
+				outlineItem.setTitle(split[0]);
+				for (int i = 1; i < split.length; i++) {
+					PDOutlineItem item = new PDOutlineItem();
+					item.setTitle(split[i]);
+					outlineItem.addLast(item);
+					outlineItem = item;
+				}
+				PDDocumentCatalog documentCatalog = document.getDocumentCatalog();
+				PDOutlineItem pdOutlineItem = new PDOutlineItem();
+				pdOutlineItem.setTitle(new File(param.getOutputFile()).getName().replace(FileTypes.PDF.getSuffix(), ""));
+				outlineItem.addLast(pdOutlineItem);
+				documentCatalog.setDocumentOutline(outlines);
+				outlines.openNode();
+				document.save(new File(param.getOutputFile()));
+			} catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+		}
+	}
+
+	public  boolean word2pf(String inputFile, String outputFile) {
+		Assert.isTrue(inputFile.endsWith(FileTypes.DOCX.getSuffix()), "输入文件不是 %s".formatted(FileTypes.DOCX.getType()));
 		ActiveXComponent app = null;
 		Dispatch doc = null;
 		try {
@@ -86,9 +114,9 @@ public class ZtbPdfMergeService {
 					new Variant(true),  // BitmapMissingFonts
 					new Variant(false)  // UseISO19005_1
 			);
-
+			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} finally {
 			if (doc != null) {
 				Dispatch.call(doc, "Close", false);
@@ -100,11 +128,11 @@ public class ZtbPdfMergeService {
 		}
 	}
 
-	public void merge(List<PdfFileEntry> entries, File file) {
+	public void merge(List<FileEntry> entries, File file) {
 		this.merge(entries, file, true);
 	}
 
-	public void merge(List<PdfFileEntry> entries, File file, Boolean overwrite) {
+	public void merge(List<FileEntry> entries, File file, Boolean overwrite) {
 		if (file.exists() && !overwrite) {
 			throw new RuntimeException("The file already exists. Please set overwrite to true or delete the existing file manually. File: " + file.getAbsolutePath());
 		}
@@ -118,7 +146,7 @@ public class ZtbPdfMergeService {
 			PDFMergerUtility mergerUtility = new PDFMergerUtility();
 			mergerUtility.setDestinationStream(destStream);
 
-			for (PdfFileEntry entry : entries) {
+			for (FileEntry entry : entries) {
 				mergerUtility.addSource(entry.getFile());
 			}
 			mergerUtility.mergeDocuments();
@@ -128,7 +156,7 @@ public class ZtbPdfMergeService {
 					throw new RuntimeException("No outline/bookmarks found in PDF.");
 				}
 
-				List<TocItem> tocItems = generateTocItems(outline.getFirstChild().getNextSibling(), outputDocument, null);
+				List<TocItem> tocItems = generateTocItems(outline.getFirstChild(), outputDocument, null);
 				List<List<TocItem>> partition = ListUtil.partition(tocItems, config.getTocCountPerPage());
 				int tocOffset = 0;
 				partition.forEach(t -> {

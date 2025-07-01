@@ -1,7 +1,9 @@
 package com.lnsoft.cloud.ztbgl;
 
+import com.lnsoft.cloud.ztbgl.common.constant.FileTypes;
 import com.lnsoft.cloud.ztbgl.utils.ZtbPdfMergeService;
-import com.lnsoft.cloud.ztbgl.utils.pdf.PdfFileEntry;
+import com.lnsoft.cloud.ztbgl.utils.pdf.FileEntry;
+import com.lnsoft.cloud.ztbgl.utils.pdf.Word2PdfParam;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -10,27 +12,35 @@ import java.util.List;
 public class ZtbPdfMergeServiceTest {
 
 	@Test
-	public void testWord2Pdf() {
+	public void testGenerateOutline(){
 		ZtbPdfMergeService ztbPdfMergeService = new ZtbPdfMergeService("/Users/kenny/IdeaProjects/example/lnsoft-cloud-ztbgl/src/main/resources/font/NotoSansSC.ttf");
-		File catagory = new File("E:\\山东方振新材料有限公司\\");
-		File[] files = catagory.listFiles();
-		for (File file : files) {
-			String absolutePath = file.getAbsolutePath();
-			if (!absolutePath.endsWith(".docx")) {
-				continue;
-			}
-			System.out.println(file.getAbsolutePath());
-			File outputFile = new File(absolutePath.substring(0, absolutePath.length() - 5) + ".pdf");
+
+		Word2PdfParam param = new Word2PdfParam();
+		List<FileEntry> catalogEntries = CatalogBuilder.buildCatalog(CatalogBuilder.files, FileTypes.DOCX);
+		for (FileEntry catalogEntry : catalogEntries) {
+			param.setInputFile(catalogEntry.getFile().getAbsolutePath());
+			File outputFile = new File(param.getInputFile().substring(0, param.getInputFile().length() - 5) + ".pdf");
 			if (outputFile.exists()) {
 				outputFile.delete();
 			}
-			ztbPdfMergeService.word2pf(absolutePath,outputFile.getAbsolutePath());
+			param.setOutputFile(outputFile.getAbsolutePath());
+
+			long l = System.currentTimeMillis() % 10;
+			if (l > 5) {
+				param.setBookmarkPath("一级目录");
+			} else if (l > 3) {
+				param.setBookmarkPath("一级目录/二级目录");
+			} else {
+				param.setBookmarkPath("一级目录/二级目录/三级目录");
+			}
+			ztbPdfMergeService.word2pf(param);
 		}
+
 	}
 
 	@Test
 	public void testMergePdf() {
-		List<PdfFileEntry> catalogEntries = CatalogBuilder.buildCatalog(CatalogBuilder.files);
+		List<FileEntry> catalogEntries = CatalogBuilder.buildCatalog(CatalogBuilder.files, FileTypes.PDF);
 		ZtbPdfMergeService ztbPdfMergeService = new ZtbPdfMergeService("/Users/kenny/IdeaProjects/example/lnsoft-cloud-ztbgl/src/main/resources/font/NotoSansSC.ttf");
 		File file = new File(System.currentTimeMillis()+"-merged.pdf");
 		long start = System.currentTimeMillis();

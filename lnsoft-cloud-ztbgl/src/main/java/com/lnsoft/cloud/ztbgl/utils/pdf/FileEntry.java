@@ -5,11 +5,12 @@ import lombok.Data;
 import java.io.File;
 
 @Data
-public class PdfFileEntry implements Comparable<PdfFileEntry> {
+public class FileEntry implements Comparable<FileEntry> {
     private File file;
     private Integer order;
+    private String rawLine;
 
-    public PdfFileEntry(File pdfFile, int order) {
+    public FileEntry(File pdfFile, int order) {
         file = pdfFile;
         this.order = order;
     }
@@ -20,10 +21,8 @@ public class PdfFileEntry implements Comparable<PdfFileEntry> {
         return String.format("%03d", order);
     }
 
-
-
     @Override
-    public int compareTo(PdfFileEntry o) {
+    public int compareTo(FileEntry o) {
         if (this.order < o.getOrder()) {
             return -1;
         }

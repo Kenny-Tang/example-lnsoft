@@ -1,7 +1,8 @@
 package com.lnsoft.cloud.ztbgl;
 
 import cn.hutool.core.collection.ListUtil;
-import com.lnsoft.cloud.ztbgl.utils.pdf.PdfFileEntry;
+import com.lnsoft.cloud.ztbgl.common.constant.FileTypes;
+import com.lnsoft.cloud.ztbgl.utils.pdf.FileEntry;
 import com.lnsoft.cloud.ztbgl.utils.pdf.TocItem;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -32,7 +33,7 @@ public class MergePdfWithCoverAndTOCn {
     public static void main(String[] args) throws IOException {
 
 
-        List<PdfFileEntry> catalogEntries = CatalogBuilder.buildCatalog(CatalogBuilder.files);
+        List<FileEntry> catalogEntries = CatalogBuilder.buildCatalog(CatalogBuilder.files, FileTypes.PDF);
 
         List<TocItem> tocItems = new ArrayList<>();
         int currentPageIndex = 0;
@@ -40,13 +41,13 @@ public class MergePdfWithCoverAndTOCn {
         PDFMergerUtility merger = new PDFMergerUtility();
         ByteArrayOutputStream contentBuffer = new ByteArrayOutputStream();
         merger.setDestinationStream(contentBuffer);
-        Deque<PdfFileEntry> stack = new ArrayDeque<>();
+        Deque<FileEntry> stack = new ArrayDeque<>();
         for (int i = catalogEntries.size() - 1; i >= 0; i--) {
             stack.addFirst(catalogEntries.get(i));
         }
         Map<Integer, TocItem> tocItemMap = new HashMap<>();
         while (!stack.isEmpty()) {
-            PdfFileEntry entry = stack.pollFirst();
+            FileEntry entry = stack.pollFirst();
             merger.addSource(entry.getFile());
 //            String markedName = entry.getIndex() + "_" + entry.getLevel() + "_" + entry.getFileName().replace(".pdf", "");
 //            TocItem e = new TocItem(markedName, entry.getLevel(), currentPageIndex, entry.order);
