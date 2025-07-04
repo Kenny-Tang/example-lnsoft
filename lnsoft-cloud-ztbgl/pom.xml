@@ -14,7 +14,13 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
+    <repositories>
+        <repository>
+            <id>com.e-iceblue</id>
+            <name>e-iceblue</name>
+            <url>https://repo.e-iceblue.com/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -61,6 +67,18 @@
         </dependency>
 
         <dependency>
+            <groupId>e-iceblue</groupId>
+            <artifactId>spire.doc.free</artifactId>
+            <version>5.3.2</version> <!-- 可根据官网更新 -->
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>e-iceblue</groupId>-->
+<!--            <artifactId>spire.doc</artifactId>-->
+<!--            <version>13.6.2</version>-->
+<!--        </dependency>-->
+
+        <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.41.2.1</version> <!-- 请检查是否为最新版本 -->
@@ -103,4 +121,5 @@
             <systemPath>${basedir}/src/main/resources/lib/jacob.jar</systemPath>
         </dependency>
     </dependencies>
+
 </project>

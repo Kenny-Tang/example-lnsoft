@@ -69,7 +69,7 @@ public class QmtTest {
 				beginOfMonth = currentMonth;
 			}
 			// 交易日
-			if (account.getStockAmount() > 0 && stockDailyData.getOpen().doubleValue() > account.getClearLine()) {
+			if (account.getStockAmount() > 0 && stockDailyData.getOpen().doubleValue() > account.getClearLine() * 100) {
 				// 卖掉利润
 //				int hand = (int) (account.getStockAmount()*account.getV2()/100);
 				// 保留利润

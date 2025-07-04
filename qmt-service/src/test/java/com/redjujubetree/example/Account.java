@@ -99,7 +99,7 @@ public class Account{
 
 		double append = getAppendTransThreshold(stockDailyData);
 		if (append > 0) {
-			purchase((int) (hand * append), stockDailyData, (int)append);
+			//purchase((int) (hand * append), stockDailyData, (int)append);
 		}
 	}
 
