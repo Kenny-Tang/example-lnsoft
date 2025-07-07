@@ -2,7 +2,10 @@ package com.redjujubetree.example;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.redjujubetree.qmt.domain.entity.StockDailyData;
+import com.redjujubetree.qmt.domain.entity.Top500Stock;
+import com.redjujubetree.qmt.mapper.Top500StockMapper;
 import com.redjujubetree.qmt.service.StockDailyDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -22,34 +25,32 @@ public class QmtTest {
 	@Resource
 	private StockDailyDataService stockDailyDataService;
 
+	@Resource
+	private Top500StockMapper top500StockMapper;
 	@Test
 	public void testTrade() {
 
 		List<String> results = new ArrayList<>();
-		for (StockEnum value : StockEnum.values()) {
+		List<Top500Stock> top500Stocks = top500StockMapper.selectList(Wrappers.lambdaQuery(Top500Stock.class));
+		for (Top500Stock value : top500Stocks) {
 			Account account = new Account(value,0*10000);
-			if (value.equals(StockEnum.NAVIETF)) {
-				account.setV2(0.4);
-			}
-			log.info("开仓："+value);
+			log.info(value.toString());
 			String strategy = strategy(account);
 			results.add(strategy);
-			strategy = strategy(account);
-			results.add(strategy);
-			break;
 		}
-		// results.forEach(t -> System.out.println(t));
+		results.forEach(t -> System.out.println(t));
 	}
 
 	private String strategy(Account account) {
 		StringBuilder stringBuilder = new StringBuilder();
 		// 定投开始时间
-		Date transDate = DateUtil.parse("2021-01-01");
+		Date transDate = DateUtil.parse("2022-01-01");
 		// 定投结束时间
 		Date endDate = new Date() ;
 		StockDailyData stockDailyData = null;
 		Date beginOfMonth = DateUtil.beginOfMonth(transDate);
 		int days = 0;
+		double stockPrice = 0;
 		while (endDate.after(transDate)) {
 			StockDailyData dailyData = stockDailyDataService.queryByCodeAndDate(account.getStockCode(), transDate);
 			if (dailyData == null) { // 闭市
@@ -57,6 +58,7 @@ public class QmtTest {
 				continue;
 			}
 			stockDailyData = dailyData;
+			stockPrice = stockDailyData.getOpen();
 			days++;
 			if (days == 10) { // 第十个交易日，执行定投
 				account.fixedPurchase(account.fixedAmount, stockDailyData);
@@ -69,18 +71,18 @@ public class QmtTest {
 				beginOfMonth = currentMonth;
 			}
 			// 交易日
-			if (account.getStockAmount() > 0 && stockDailyData.getOpen().doubleValue() > account.getClearLine() * 100) {
+			if (account.getStockAmount() > 0 && stockPrice > account.getClearLine() * 100) {
 				// 卖掉利润
 //				int hand = (int) (account.getStockAmount()*account.getV2()/100);
 				// 保留利润
-				int hand = (int) (account.getCost() / stockDailyData.getOpen().doubleValue() / 100);
+				int hand = (int) (account.getCost() / stockPrice / 100);
 				account.setAppendTrans(0);
-				stringBuilder.append("卖出前，当前账户状态：" + account.toString(stockDailyData.getOpen().doubleValue())).append("");
+				stringBuilder.append("卖出前，当前账户状态：" + account.toString(stockPrice)).append("");
 				String sell = account.sell(hand, stockDailyData);
 				stringBuilder.append(sell);
 			}
 		}
-		String x = "定投结束，当前账户状态：" + account.toString(stockDailyData.getOpen().doubleValue());
+		String x = "定投结束，当前账户状态：" + account.toString(stockPrice);
 		return stringBuilder.append(x).append("\n").toString();
 	}
 

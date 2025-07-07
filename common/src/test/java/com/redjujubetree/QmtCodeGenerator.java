@@ -43,12 +43,13 @@ public class QmtCodeGenerator {
 								.entity("domain.entity") // 设置实体类包名
 				)
 				.strategyConfig(builder ->
-						builder.addInclude("stock_daily_data") // 设置需要生成的表名
+						builder.addInclude("top500_stock") // 设置需要生成的表名
 								.serviceBuilder()
 //								.enableFileOverride() // 设置service接口覆盖文件
 								.convertServiceFileName((entityName -> entityName + ConstVal.SERVICE))
 								.entityBuilder()
 								.enableFileOverride() // 设置实体类覆盖文件
+								.enableTableFieldAnnotation()
 								.controllerBuilder()
 								.enableRestStyle() // 开启生成@RestController控制器
 				)

@@ -4,84 +4,83 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * <p>
- * 每日股票交易数据
+ * A股股票日线行情数据（前复权）
  * </p>
  *
  * @author tanjianwei
- * @since 2025-07-01
+ * @since 2025-07-05
  */
 @TableName("stock_daily_data")
 public class StockDailyData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 自增主键
+     */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
-     * 日期
+     * 交易日期
      */
     private Date tradeDate;
 
-    /**
-     * 股票代码
-     */
     private String tsCode;
 
     /**
-     * 开盘
+     * 开盘价
      */
-    private BigDecimal open;
+    private Double open;
 
     /**
-     * 收盘
+     * 收盘价
      */
-    private BigDecimal close;
+    private Double close;
 
     /**
-     * 最高
+     * 最高价
      */
-    private BigDecimal high;
+    private Double high;
 
     /**
-     * 最低
+     * 最低价
      */
-    private BigDecimal low;
+    private Double low;
 
     /**
-     * 成交量（单位：股）
+     * 成交量（手）
      */
-    private Long vol;
+    private Double vol;
 
     /**
-     * 成交额（单位：元）
+     * 成交额（元）
      */
-    private BigDecimal amount;
+    private Double amount;
 
     /**
      * 振幅（%）
      */
-    private BigDecimal pctChg;
-
-    /**
-     * 涨跌幅（%）
-     */
-    private BigDecimal pctChange;
+    private Double amplitude;
 
     /**
      * 涨跌额
      */
-    private BigDecimal dailyChange;
+    private Double dailyChange;
+
+    /**
+     * 涨跌幅（%）
+     */
+    private Double pctChange;
 
     /**
      * 换手率（%）
      */
-    private BigDecimal turnoverRate;
+    private Double turnoverRate;
 
     public Long getId() {
         return id;
@@ -107,83 +106,83 @@ public class StockDailyData implements Serializable {
         this.tsCode = tsCode;
     }
 
-    public BigDecimal getOpen() {
+    public Double getOpen() {
         return open;
     }
 
-    public void setOpen(BigDecimal open) {
+    public void setOpen(Double open) {
         this.open = open;
     }
 
-    public BigDecimal getClose() {
+    public Double getClose() {
         return close;
     }
 
-    public void setClose(BigDecimal close) {
+    public void setClose(Double close) {
         this.close = close;
     }
 
-    public BigDecimal getHigh() {
+    public Double getHigh() {
         return high;
     }
 
-    public void setHigh(BigDecimal high) {
+    public void setHigh(Double high) {
         this.high = high;
     }
 
-    public BigDecimal getLow() {
+    public Double getLow() {
         return low;
     }
 
-    public void setLow(BigDecimal low) {
+    public void setLow(Double low) {
         this.low = low;
     }
 
-    public Long getVol() {
+    public Double getVol() {
         return vol;
     }
 
-    public void setVol(Long vol) {
+    public void setVol(Double vol) {
         this.vol = vol;
     }
 
-    public BigDecimal getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
-    public BigDecimal getPctChg() {
-        return pctChg;
+    public Double getAmplitude() {
+        return amplitude;
     }
 
-    public void setPctChg(BigDecimal pctChg) {
-        this.pctChg = pctChg;
+    public void setAmplitude(Double amplitude) {
+        this.amplitude = amplitude;
     }
 
-    public BigDecimal getPctChange() {
-        return pctChange;
-    }
-
-    public void setPctChange(BigDecimal pctChange) {
-        this.pctChange = pctChange;
-    }
-
-    public BigDecimal getDailyChange() {
+    public Double getDailyChange() {
         return dailyChange;
     }
 
-    public void setDailyChange(BigDecimal dailyChange) {
+    public void setDailyChange(Double dailyChange) {
         this.dailyChange = dailyChange;
     }
 
-    public BigDecimal getTurnoverRate() {
+    public Double getPctChange() {
+        return pctChange;
+    }
+
+    public void setPctChange(Double pctChange) {
+        this.pctChange = pctChange;
+    }
+
+    public Double getTurnoverRate() {
         return turnoverRate;
     }
 
-    public void setTurnoverRate(BigDecimal turnoverRate) {
+    public void setTurnoverRate(Double turnoverRate) {
         this.turnoverRate = turnoverRate;
     }
 
@@ -199,9 +198,9 @@ public class StockDailyData implements Serializable {
             ", low = " + low +
             ", vol = " + vol +
             ", amount = " + amount +
-            ", pctChg = " + pctChg +
-            ", pctChange = " + pctChange +
+            ", amplitude = " + amplitude +
             ", dailyChange = " + dailyChange +
+            ", pctChange = " + pctChange +
             ", turnoverRate = " + turnoverRate +
         "}";
     }

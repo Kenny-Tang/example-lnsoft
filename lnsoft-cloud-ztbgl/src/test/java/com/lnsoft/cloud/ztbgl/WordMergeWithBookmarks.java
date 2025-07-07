@@ -5,6 +5,8 @@ import com.lnsoft.cloud.ztbgl.utils.pdf.FileEntry;
 import com.spire.doc.Document;
 import com.spire.doc.FileFormat;
 import com.spire.doc.Section;
+import com.spire.doc.documents.BreakType;
+import com.spire.doc.documents.Paragraph;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,16 +26,14 @@ public class WordMergeWithBookmarks {
         Document mainDoc = new Document();
         mainDoc.loadFromFile(files.get(0));
 
-
-
         // 合并后续文档
         for (int i = 1; i < files.size(); i++) {
             Document partDoc = new Document();
             partDoc.loadFromFile(files.get(i));
             // 在合并前插入分页符（可选）
-//            Section lastSection = mainDoc.getLastSection();
-//            Paragraph para = lastSection.addParagraph();
-//            para.appendBreak(BreakType.Page_Break);
+            Section lastSection = mainDoc.getLastSection();
+            Paragraph para = lastSection.addParagraph();
+            para.appendBreak(BreakType.Page_Break);
             // 合并内容（包括格式、段落等）
             for (Section section : (Iterable<Section>) partDoc.getSections()) {
                 mainDoc.getSections().add(section.deepClone());
