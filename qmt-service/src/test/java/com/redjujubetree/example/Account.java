@@ -2,7 +2,6 @@ package com.redjujubetree.example;
 
 import cn.hutool.core.date.DateUtil;
 import com.redjujubetree.qmt.domain.entity.StockDailyData;
-import com.redjujubetree.qmt.domain.entity.Top500Stock;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -15,10 +14,10 @@ public class Account{
 	}
 
 
-	public Account(Top500Stock stock, double balance) {
+	public Account(String code, String name, double balance) {
 		this.balance = balance;
-		this.stockCode = stock.getCode();
-		this.stockName = stock.getName();
+		this.stockCode = code;
+		this.stockName = name;
 	}
 	private String stockName;
 	private String stockCode;
@@ -69,6 +68,9 @@ public class Account{
 	public double getProfit(double price) {
 		double currentValue = getCurrentValue(price);
 		double profit = currentValue - baseLine;
+		if (baseLine == 0) {
+			return 0;
+		}
 		// 保留两位小数
 		return BigDecimal.valueOf(profit/baseLine).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}

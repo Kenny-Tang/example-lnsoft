@@ -16,6 +16,12 @@ spring:
             - Path=/api/users/**
           filters:
             - StripPrefix=1
+        - id: qmt-service-route
+          uri: lb://qmt-service
+          predicates:
+            - Path=/api/qmt/**
+          filters:
+            - StripPrefix=1
       discovery:
         locator:
           enabled: true

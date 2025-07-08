@@ -3,8 +3,9 @@ package com.redjujubetree.example;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.redjujubetree.qmt.domain.entity.KennyStockInfo;
 import com.redjujubetree.qmt.domain.entity.StockDailyData;
-import com.redjujubetree.qmt.domain.entity.Top500Stock;
+import com.redjujubetree.qmt.mapper.KennyStockInfoMapper;
 import com.redjujubetree.qmt.mapper.Top500StockMapper;
 import com.redjujubetree.qmt.service.StockDailyDataService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +28,16 @@ public class QmtTest {
 
 	@Resource
 	private Top500StockMapper top500StockMapper;
+	@Resource
+	private KennyStockInfoMapper kennyStockInfoMapper;
 	@Test
 	public void testTrade() {
 
 		List<String> results = new ArrayList<>();
-		List<Top500Stock> top500Stocks = top500StockMapper.selectList(Wrappers.lambdaQuery(Top500Stock.class));
-		for (Top500Stock value : top500Stocks) {
-			Account account = new Account(value,0*10000);
+//		List<Top500Stock> top500Stocks = top500StockMapper.selectList(Wrappers.lambdaQuery(Top500Stock.class));
+		List<KennyStockInfo> kennyStockInfos = kennyStockInfoMapper.selectList(Wrappers.lambdaQuery(KennyStockInfo.class));
+		for (KennyStockInfo value : kennyStockInfos) {
+			Account account = new Account(value.getCode(), value.getName(),0*10000);
 			log.info(value.toString());
 			String strategy = strategy(account);
 			results.add(strategy);
