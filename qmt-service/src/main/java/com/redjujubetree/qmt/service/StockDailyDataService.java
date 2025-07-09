@@ -1,9 +1,12 @@
 package com.redjujubetree.qmt.service;
 
+import com.redjujubetree.qmt.domain.bo.StockPriceBO;
 import com.redjujubetree.qmt.domain.entity.StockDailyData;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.redjujubetree.qmt.domain.param.PriceParam;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -21,4 +24,5 @@ public interface StockDailyDataService extends IService<StockDailyData> {
 
     StockDailyData queryByCodeAndDate(String number, Date transDate);
 
+	List<StockPriceBO> queryWeekData(PriceParam param);
 }

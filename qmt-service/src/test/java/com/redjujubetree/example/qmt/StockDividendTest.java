@@ -1,6 +1,6 @@
 package com.redjujubetree.example.qmt;
 
-import com.redjujubetree.qmt.domain.StockDividendDistribution;
+import com.redjujubetree.qmt.domain.bo.StockDividendDistribution;
 import com.redjujubetree.qmt.domain.param.DividendYieldParam;
 import com.redjujubetree.qmt.service.StockDividendService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class StockDividendTest {
 	@Test
 	public void testDividendWeekTrend() {
 		DividendYieldParam param = new DividendYieldParam();
-		List<StockDividendDistribution> stockDividendDistributions = stockDividendService.queryWeekTrend(param);
+		List<StockDividendDistribution> stockDividendDistributions = stockDividendService.queryDividendAmountYear(param);
 		System.out.println(stockDividendDistributions);
 	}
 }

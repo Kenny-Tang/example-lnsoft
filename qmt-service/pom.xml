@@ -112,30 +112,30 @@
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
             <!-- Docker maven plugin -->
-<!--            <plugin>-->
-<!--                <groupId>com.google.cloud.tools</groupId>-->
-<!--                <artifactId>jib-maven-plugin</artifactId>-->
-<!--                <version>3.4.0</version>-->
-<!--                <configuration>-->
-<!--                    <from>-->
-<!--                        <image>eclipse-temurin:17-jdk</image>-->
-<!--                    </from>-->
-<!--                    <to>-->
-<!--                        <image>crpi-dvladtsekkyimikp.cn-heyuan.personal.cr.aliyuncs.com/xiaozaoshu/user-service</image>-->
-<!--                        <tags>-->
-<!--                            <tag>${project.version}</tag>-->
-<!--                            <tag>latest</tag>-->
-<!--                        </tags>-->
-<!--                    </to>-->
-<!--                    <container>-->
-<!--                        <mainClass>com.redjujubetree.ExampleApplication</mainClass>-->
-<!--                        <ports>-->
-<!--                            <port>8081</port>-->
-<!--                        </ports>-->
-<!--                    </container>-->
-<!--                    <allowInsecureRegistries>true</allowInsecureRegistries>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <from>
+                        <image>eclipse-temurin:17-jdk</image>
+                    </from>
+                    <to>
+                        <image>crpi-dvladtsekkyimikp.cn-heyuan.personal.cr.aliyuncs.com/xiaozaoshu/qmt-service</image>
+                        <tags>
+                            <tag>${project.version}</tag>
+                            <tag>latest</tag>
+                        </tags>
+                    </to>
+                    <container>
+                        <mainClass>com.redjujubetree.QmtApplication</mainClass>
+                        <ports>
+                            <port>8083</port>
+                        </ports>
+                    </container>
+                    <allowInsecureRegistries>true</allowInsecureRegistries>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

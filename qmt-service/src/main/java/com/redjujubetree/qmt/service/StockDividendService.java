@@ -1,8 +1,8 @@
 package com.redjujubetree.qmt.service;
 
-import com.redjujubetree.qmt.domain.StockDividendDistribution;
-import com.redjujubetree.qmt.domain.entity.StockDividend;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.redjujubetree.qmt.domain.bo.StockDividendDistribution;
+import com.redjujubetree.qmt.domain.entity.StockDividend;
 import com.redjujubetree.qmt.domain.param.DividendYieldParam;
 
 import java.util.List;
@@ -21,5 +21,5 @@ public interface StockDividendService extends IService<StockDividend> {
 
     void updateStockDividendById(StockDividend stockDividend);
 
-	List<StockDividendDistribution> queryWeekTrend(DividendYieldParam param);
+	List<StockDividendDistribution> queryDividendAmountYear(DividendYieldParam param);
 }

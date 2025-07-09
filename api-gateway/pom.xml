@@ -61,6 +61,31 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <!-- Docker maven plugin -->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <from>
+                        <image>eclipse-temurin:17-jdk</image>
+                    </from>
+                    <to>
+                        <image>crpi-dvladtsekkyimikp.cn-heyuan.personal.cr.aliyuncs.com/xiaozaoshu/api-gateway</image>
+                        <tags>
+                            <tag>${project.version}</tag>
+                            <tag>latest</tag>
+                        </tags>
+                    </to>
+                    <container>
+                        <mainClass>com.redjujubetree.ApiGatewayApplication</mainClass>
+                        <ports>
+                            <port>8080</port>
+                        </ports>
+                    </container>
+                    <allowInsecureRegistries>true</allowInsecureRegistries>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

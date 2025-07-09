@@ -1,6 +1,8 @@
 package com.redjujubetree.qmt.domain.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 
@@ -10,12 +12,15 @@ import java.io.Serializable;
  * </p>
  *
  * @author tanjianwei
- * @since 2025-07-07
+ * @since 2025-07-09
  */
 @TableName("kenny_stock_info")
 public class KennyStockInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     @TableField("code")
     private String code;
@@ -37,6 +42,14 @@ public class KennyStockInfo implements Serializable {
      */
     @TableField("dividend_23")
     private Double dividend23;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getCode() {
         return code;
@@ -73,7 +86,8 @@ public class KennyStockInfo implements Serializable {
     @Override
     public String toString() {
         return "KennyStockInfo{" +
-            "code = " + code +
+            "id = " + id +
+            ", code = " + code +
             ", name = " + name +
             ", dividend24 = " + dividend24 +
             ", dividend23 = " + dividend23 +

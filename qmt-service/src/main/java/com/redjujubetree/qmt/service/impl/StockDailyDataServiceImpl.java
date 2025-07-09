@@ -7,7 +7,9 @@ import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.redjujubetree.common.CacheUtil;
+import com.redjujubetree.qmt.domain.bo.StockPriceBO;
 import com.redjujubetree.qmt.domain.entity.StockDailyData;
+import com.redjujubetree.qmt.domain.param.PriceParam;
 import com.redjujubetree.qmt.mapper.StockDailyDataMapper;
 import com.redjujubetree.qmt.service.StockDailyDataService;
 import lombok.extern.slf4j.Slf4j;
@@ -94,4 +96,9 @@ public class StockDailyDataServiceImpl extends ServiceImpl<StockDailyDataMapper,
 		return e.getTsCode()+ ":" + DatePattern.PURE_DATETIME_FORMAT.format(e.getTradeDate());
 	}
 
+	@Override
+	public List<StockPriceBO> queryWeekData(PriceParam param) {
+		List<StockPriceBO> stockPriceBOS = baseMapper.queryWeekData(param);
+		return stockPriceBOS;
+	}
 }

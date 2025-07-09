@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redjujubetree.qmt.mapper.StockDailyDataMapper">
+
+    <select id="queryWeekData" resultType="com.redjujubetree.qmt.domain.bo.StockPriceBO">
+        SELECT
+        AVG(sdd.`open`)  AS price,
+        ksi.code AS stockCode,
+        ksi.name AS stockName,
+        DATE_FORMAT(sdd.trade_date, '%Y%U') AS trade_date
+        FROM
+        stock_daily_data sdd
+        JOIN kenny_stock_info ksi ON sdd.ts_code = ksi.code
+        WHERE 1=1
+        AND sdd.trade_date >= '2023-10-01'
+        GROUP BY
+        ksi.code, ksi.name,  DATE_FORMAT(sdd.trade_date, '%Y%U')
+        ORDER BY ksi.code
+
+    </select>
+
+</mapper>

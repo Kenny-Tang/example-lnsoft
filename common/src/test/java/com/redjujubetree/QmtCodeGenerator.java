@@ -43,7 +43,7 @@ public class QmtCodeGenerator {
 								.entity("domain.entity") // 设置实体类包名
 				)
 				.strategyConfig(builder ->
-						builder.addInclude("kenny_stock_info") // 设置需要生成的表名
+						builder.addInclude("top500_stock") // 设置需要生成的表名
 								.serviceBuilder()
 //								.enableFileOverride() // 设置service接口覆盖文件
 								.convertServiceFileName((entityName -> entityName + ConstVal.SERVICE))

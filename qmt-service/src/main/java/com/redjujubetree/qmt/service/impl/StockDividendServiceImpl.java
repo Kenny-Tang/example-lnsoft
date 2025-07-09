@@ -2,7 +2,7 @@ package com.redjujubetree.qmt.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.redjujubetree.qmt.domain.StockDividendDistribution;
+import com.redjujubetree.qmt.domain.bo.StockDividendDistribution;
 import com.redjujubetree.qmt.domain.entity.StockDividend;
 import com.redjujubetree.qmt.domain.param.DividendYieldParam;
 import com.redjujubetree.qmt.mapper.StockDividendMapper;
@@ -38,7 +38,7 @@ public class StockDividendServiceImpl extends ServiceImpl<StockDividendMapper, S
     }
 
 	@Override
-	public List<StockDividendDistribution>  queryWeekTrend(DividendYieldParam param) {
+	public List<StockDividendDistribution> queryDividendAmountYear(DividendYieldParam param) {
 		List<StockDividendDistribution> stockDividendDistributions = baseMapper.queryWeekTrend(param);
 		return stockDividendDistributions;
 	}

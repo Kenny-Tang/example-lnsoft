@@ -1,7 +1,7 @@
 package com.redjujubetree.qmt.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.redjujubetree.qmt.domain.StockDividendDistribution;
+import com.redjujubetree.qmt.domain.bo.StockDividendDistribution;
 import com.redjujubetree.qmt.domain.entity.StockDividend;
 import com.redjujubetree.qmt.domain.param.DividendYieldParam;
 import com.redjujubetree.qmt.service.StockDividendService;
@@ -42,7 +42,7 @@ public class StockDividendController {
 	@PostMapping("list-trends")
 	public BaseResponse list(@RequestBody DividendYieldParam param) {
 		log.info("DividendYieldParam : {}", JSON.toJSONString(param));
-		List<StockDividendDistribution> stockDividendDistributions = stockDividendService.queryWeekTrend(param);
+		List<StockDividendDistribution> stockDividendDistributions = stockDividendService.queryDividendAmountYear(param);
 		return BaseResponse.ofSuccess(stockDividendDistributions);
 	}
 }

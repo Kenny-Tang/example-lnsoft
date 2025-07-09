@@ -1,7 +1,11 @@
 package com.redjujubetree.qmt.mapper;
 
-import com.redjujubetree.qmt.domain.entity.StockDailyData;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.redjujubetree.qmt.domain.bo.StockPriceBO;
+import com.redjujubetree.qmt.domain.entity.StockDailyData;
+import com.redjujubetree.qmt.domain.param.PriceParam;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface StockDailyDataMapper extends BaseMapper<StockDailyData> {
 
+	List<StockPriceBO> queryWeekData(PriceParam param);
 }

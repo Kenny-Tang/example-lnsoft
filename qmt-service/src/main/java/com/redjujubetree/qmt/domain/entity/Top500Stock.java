@@ -1,6 +1,7 @@
 package com.redjujubetree.qmt.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 
@@ -10,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author tanjianwei
- * @since 2025-07-07
+ * @since 2025-07-09
  */
 @TableName("top500_stock")
 public class Top500Stock implements Serializable {
@@ -20,7 +21,7 @@ public class Top500Stock implements Serializable {
     /**
      * 股票代码
      */
-    @TableField("code")
+    @TableId("code")
     private String code;
 
     /**

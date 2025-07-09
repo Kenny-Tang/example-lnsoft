@@ -1,14 +1,22 @@
 package com.redjujubetree.qmt.controller;
 
+import cn.hutool.core.lang.Assert;
+import com.alibaba.fastjson.JSON;
+import com.redjujubetree.qmt.domain.bo.StockPriceBO;
+import com.redjujubetree.qmt.domain.entity.StockDailyData;
+import com.redjujubetree.qmt.domain.param.PriceParam;
+import com.redjujubetree.qmt.service.StockDailyDataService;
 import com.redjujubetree.response.BaseResponse;
 import com.redjujubetree.response.RespCodeEnum;
-import lombok.extern.slf4j.Slf4j;
 import lombok.Setter;
-import com.redjujubetree.qmt.domain.entity.StockDailyData;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.redjujubetree.qmt.service.StockDailyDataService;
-import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -38,5 +46,13 @@ public class StockDailyDataController {
 			log.error("系统异常请联系管理员处理", e);
 			return new BaseResponse(RespCodeEnum.FAIL.getCode(), "系统异常请联系管理员处理");
 		}
+	}
+
+	@PostMapping("list-trends")
+	public BaseResponse list(@RequestBody PriceParam param) {
+		log.info("PriceParam {}", JSON.toJSONString(param));
+		Assert.notNull(param.getStartDate(), "查询开始时间为必传字段");
+		List<StockPriceBO> stockPriceBOS = stockDailyDataService.queryWeekData(param);
+		return BaseResponse.ofSuccess(stockPriceBOS);
 	}
 }

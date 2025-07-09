@@ -1,7 +1,7 @@
 package com.redjujubetree.qmt.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.redjujubetree.qmt.domain.StockDividendDistribution;
+import com.redjujubetree.qmt.domain.bo.StockDividendDistribution;
 import com.redjujubetree.qmt.domain.entity.StockDividend;
 import com.redjujubetree.qmt.domain.param.DividendYieldParam;
 
