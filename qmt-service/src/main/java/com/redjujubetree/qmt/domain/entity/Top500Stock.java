@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author tanjianwei
- * @since 2025-07-09
+ * @since 2025-07-10
  */
 @TableName("top500_stock")
 public class Top500Stock implements Serializable {

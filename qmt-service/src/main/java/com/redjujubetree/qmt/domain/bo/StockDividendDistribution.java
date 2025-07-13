@@ -17,7 +17,7 @@ public class StockDividendDistribution extends StockTrend{
 
 	@Override
 	public String getLabel() {
-		return getStockCode()+"";
+		return getStockName();
 	}
 
 	@Override

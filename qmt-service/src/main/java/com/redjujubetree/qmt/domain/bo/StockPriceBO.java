@@ -15,7 +15,7 @@ public class StockPriceBO extends StockTrend{
 
 	@Override
 	public String getLabel() {
-		return stockCode+"-"+stockName;
+		return stockName;
 	}
 
 	@Override

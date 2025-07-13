@@ -72,7 +72,8 @@ public class UserVisitTraceController {
 				"cfc0b048baf82c459d4a2a9d407174fb",
 				"2d362c1f5196fabc5de16164b1136e44", // 我的电脑
 				"348b1a2bbc78407802b2f5242c6bd631",  // 我的手机
-				"f8e9452a91c071574c3ad8eedc89f119" // WeChat
+				"f8e9452a91c071574c3ad8eedc89f119", // WeChat
+				"561509212ffb879b430aa7aa9a843e0b"
 		);
 	}
 }

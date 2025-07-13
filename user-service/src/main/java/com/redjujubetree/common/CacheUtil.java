@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class CacheUtil {
-	private static Boolean cacheEnabled = false;
+	private static Boolean cacheEnabled = true;
 	static class Entry {
 		Object value;
 		long expireAt;

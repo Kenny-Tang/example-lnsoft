@@ -28,7 +28,7 @@ import java.util.List;
 @Slf4j
 @Setter
 @RestController
-@RequestMapping("/qmt/stockDividend")
+@RequestMapping("/qmt/stockDividend/")
 public class StockDividendController {
 
     @Resource
