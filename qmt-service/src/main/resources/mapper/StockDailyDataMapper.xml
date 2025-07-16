@@ -5,20 +5,22 @@
 <mapper namespace="com.redjujubetree.qmt.mapper.StockDailyDataMapper">
 
     <select id="queryWeekData" resultType="com.redjujubetree.qmt.domain.bo.StockPriceBO">
+        select ksi.code stock_code, ksi.name stock_name, p.trade_date, p.price
+        from
+        (
         SELECT
-        AVG(sdd.`open`)  AS price,
-        ksi.code AS stockCode,
-        ksi.name AS stockName,
-        DATE_FORMAT(sdd.trade_date, '%Y%U') AS trade_date
+        round(AVG(sdd.`open`),2)  AS price,
+        DATE_FORMAT(sdd.trade_date, '%Y%U') AS trade_date,
+        sdd.ts_code
         FROM
         stock_daily_data sdd
-        JOIN kenny_stock_info ksi ON sdd.ts_code = ksi.code
-        WHERE 1=1
-        AND sdd.trade_date >= '2023-10-01'
-        GROUP BY
-        ksi.code, ksi.name,  DATE_FORMAT(sdd.trade_date, '%Y%U')
-        ORDER BY ksi.code
-
+        WHERE sdd.trade_date >= '2023-07-01'
+        GROUP BY DATE_FORMAT(sdd.trade_date, '%Y%U'), sdd.ts_code
+        ) p
+        JOIN (
+            select * from kenny_stock_info_view order by pct_estimated desc limit 0 , 12
+        ) ksi ON p.ts_code = ksi.code
+        order by ksi.pct_estimated desc
     </select>
 
 </mapper>

@@ -15,11 +15,13 @@ spring:
         group: DEFAULT_GROUP
         file-extension: yaml
         refresh-enabled: true
+        fail-fast: false    # 🚨 关键配置：Nacos 不可用时启动不报错
       discovery:
         server-addr: 127.0.0.1:8848
         namespace: public
         group: DEFAULT_GROUP
         heartbeat-interval: 5000  # 每5秒发送一次心跳
+        fail-fast: false    # 🚨 关键配置：Nacos 不可用时启动不报错
   config:
     import: optional:nacos:${spring.application.name}.yaml
 

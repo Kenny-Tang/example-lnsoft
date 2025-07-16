@@ -7,9 +7,11 @@
     <select id="queryWeekTrend" resultType="com.redjujubetree.qmt.domain.bo.StockDividendDistribution">
         select stock_code, ksi.name as stock_name, real_year, dividend_distribution, ksi.`open` , round(dividend_distribution / ksi.`open` * 100,2) as pct_dividend
         from stock_div_amount_year t
-        join kenny_stock_info_view ksi on ksi.code = t.stock_code
+        join (
+            select * from kenny_stock_info_view order by pct_estimated desc limit 0 , 12
+        ) ksi on ksi.code = t.stock_code
         where t.stock_code
-        order by ksi.code
+        order by pct_estimated desc
     </select>
 
 </mapper>
