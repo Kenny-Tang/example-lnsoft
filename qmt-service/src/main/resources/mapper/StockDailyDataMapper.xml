@@ -5,7 +5,7 @@
 <mapper namespace="com.redjujubetree.qmt.mapper.StockDailyDataMapper">
 
     <select id="queryWeekData" resultType="com.redjujubetree.qmt.domain.bo.StockPriceBO">
-        select ksi.code stock_code, ksi.name stock_name, p.trade_date, p.price
+        select ksi.code stock_code, ksi.name stock_name, p.trade_date, p.price, dividend_estimated, round( dividend_estimated/p.price*100,2) pct_dividend_estimated
         from
         (
         SELECT
@@ -18,7 +18,7 @@
         GROUP BY DATE_FORMAT(sdd.trade_date, '%Y%U'), sdd.ts_code
         ) p
         JOIN (
-            select * from kenny_stock_info_view order by pct_estimated desc limit 0 , 12
+        select * from kenny_stock_info_view order by pct_estimated desc limit 0 , 12
         ) ksi ON p.ts_code = ksi.code
         order by ksi.pct_estimated desc
     </select>

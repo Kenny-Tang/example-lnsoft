@@ -8,6 +8,8 @@ public class StockPriceBO extends StockTrend{
 	private String stockName;
 	private String tradeDate;
 	private double price;
+	private double dividendEstimated;
+	private Double pctDividendEstimated;
 
 	public String getX() {
 		return tradeDate;
@@ -20,6 +22,6 @@ public class StockPriceBO extends StockTrend{
 
 	@Override
 	public String getV() {
-		return getPrice()+"";
+		return getPctDividendEstimated()+"";
 	}
 }
