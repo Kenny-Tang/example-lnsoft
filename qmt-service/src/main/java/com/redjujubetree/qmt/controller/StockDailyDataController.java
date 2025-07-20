@@ -2,6 +2,7 @@ package com.redjujubetree.qmt.controller;
 
 import cn.hutool.core.lang.Assert;
 import com.alibaba.fastjson.JSON;
+import com.redjujubetree.common.CacheUtil;
 import com.redjujubetree.qmt.domain.bo.StockPriceBO;
 import com.redjujubetree.qmt.domain.entity.StockDailyData;
 import com.redjujubetree.qmt.domain.param.PriceParam;
@@ -53,6 +54,7 @@ public class StockDailyDataController {
 		log.info("PriceParam {}", JSON.toJSONString(param));
 		Assert.notNull(param.getStartDate(), "查询开始时间为必传字段");
 		List<StockPriceBO> stockPriceBOS = stockDailyDataService.queryWeekData(param);
+		CacheUtil.get("");
 		return BaseResponse.ofSuccess(stockPriceBOS);
 	}
 }

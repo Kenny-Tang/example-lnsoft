@@ -1,5 +1,6 @@
 package com.redjujubetree.common;
 
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -12,13 +13,13 @@ public class CacheUtil {
 		Entry(Object v, long e) { value = v; expireAt = e; }
 	}
 
-	private static final ConcurrentHashMap<String, Entry> cache = new ConcurrentHashMap<>();
+	private static final ConcurrentHashMap<Serializable, Entry> cache = new ConcurrentHashMap<>();
 
-	public static void put(String key, Object value, long ttl) {
+	public static void put(Serializable key, Object value, long ttl) {
 		put(key, value, ttl, TimeUnit.HOURS);
 	}
 
-	public static void put(String key, Object value, long ttl, TimeUnit unit) {
+	public static void put(Serializable key, Object value, long ttl, TimeUnit unit) {
 		TimeUnit timeUnit = Optional.ofNullable(unit).orElse(TimeUnit.MILLISECONDS);
 		if (timeUnit == TimeUnit.SECONDS) {
 			ttl *= 1000; // Convert seconds to milliseconds
@@ -32,7 +33,7 @@ public class CacheUtil {
 		cache.put(key, new Entry(value, System.currentTimeMillis() + ttl));
 	}
 
-	public static  <T> T get(String key) {
+	public static  <T> T get(Serializable key) {
 		if (!cacheEnabled) {
 			return null; // Cache is disabled
 		}
@@ -44,7 +45,19 @@ public class CacheUtil {
 		return (T) entry.value;
 	}
 
+	public static Long getTimeout(Serializable key) {
+		if (!cacheEnabled) {
+			return null; // Cache is disabled
+		}
+		Entry entry = cache.get(key);
+		if (entry == null || System.currentTimeMillis() > entry.expireAt) {
+			cache.remove(key);
+			return null;
+		}
+		return entry.expireAt;
+	}
+
 	public static void removeKeyPrefix(String keyPattern) {
-		cache.keySet().removeIf(key -> key.startsWith(keyPattern));
+		cache.keySet().removeIf(key -> key.toString().startsWith(keyPattern));
 	}
 }

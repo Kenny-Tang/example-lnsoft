@@ -35,35 +35,29 @@ public class UserVisitTraceController {
 
 	@RequestMapping
 	public BaseResponse save(HttpServletRequest request, @RequestBody UserVisitTrace userVisitTrace) {
-		try {
-			Cookie[] cookies = request.getCookies();
-			if (cookies != null) {
-				for (Cookie cookie : cookies) {
-					String token = cookie.getValue();
-					String name = cookie.getName();
-					log.info("Token from cookie: {} : {}", name, token);
-					if ("vId".equals(cookie.getName())) {
-						userVisitTrace.setClientId(cookie.getValue());
-					}
+		String clientIp = (String) request.getAttribute("clientIp");
+
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				String token = cookie.getValue();
+				String name = cookie.getName();
+				log.info("Token from cookie: {} : {}", name, token);
+				if ("vId".equals(cookie.getName())) {
+					userVisitTrace.setClientId(cookie.getValue());
 				}
 			}
-			if (excludeClientIdSet.contains(userVisitTrace.getClientId())
-					|| "127.0.0.1".equals(userVisitTrace.getRemoteAddr()) // 本地测试时不记录访问日志
-			){
-				return new BaseResponse(RespCodeEnum.SUCCESS.getCode(), RespCodeEnum.SUCCESS.getMessage());
-			}
-			userVisitTrace.setRemoteAddr(request.getRemoteAddr());
-			userVisitTrace.setRemotePort(request.getRemotePort());
-			userVisitTraceService.saveUserVisitTrace(userVisitTrace);
-			log.info("保存用户访问记录: {}", JSON.toJSONString(userVisitTrace));
-			return new BaseResponse(RespCodeEnum.SUCCESS.getCode(), RespCodeEnum.SUCCESS.getMessage());
-		} catch(IllegalArgumentException e){
-			log.warn(e.getMessage(), e);
-			return new BaseResponse(RespCodeEnum.PARAM_ERROR.getCode(), RespCodeEnum.PARAM_ERROR.getMessage());
-		} catch (Exception e) {
-			log.error("系统异常请联系管理员处理", e);
-			return new BaseResponse(RespCodeEnum.FAIL.getCode(), "系统异常请联系管理员处理");
 		}
+		if (excludeClientIdSet.contains(userVisitTrace.getClientId())
+				|| "127.0.0.1".equals(userVisitTrace.getRemoteAddr()) // 本地测试时不记录访问日志
+		){
+			return new BaseResponse(RespCodeEnum.SUCCESS.getCode(), RespCodeEnum.SUCCESS.getMessage());
+		}
+		userVisitTrace.setRemoteAddr(clientIp);
+		userVisitTrace.setRemotePort(request.getRemotePort());
+		userVisitTraceService.saveUserVisitTrace(userVisitTrace);
+		log.info("保存用户访问记录: {}", JSON.toJSONString(userVisitTrace));
+		return new BaseResponse(RespCodeEnum.SUCCESS.getCode(), RespCodeEnum.SUCCESS.getMessage());
 	}
 	public static Set<String> excludeClientIdSet;
 
