@@ -9,17 +9,15 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 127.0.0.1:8848
-        namespace: public
+        server-addr: www.xiaozaoshu.com:10082
         watch-delay: 5000  # 延迟注册时间（单位：毫秒）
-        group: DEFAULT_GROUP
         file-extension: yaml
         refresh-enabled: true
         fail-fast: false    # 🚨 关键配置：Nacos 不可用时启动不报错
       discovery:
-        server-addr: 127.0.0.1:8848
-        namespace: public
-        group: DEFAULT_GROUP
+        server-addr: www.xiaozaoshu.com:10082
+        username: ${SPRING_CLOUD_NACOS_USERNAME:nacos}
+        password: ${SPRING_CLOUD_NACOS_PASSWORD:nac@890}
         heartbeat-interval: 5000  # 每5秒发送一次心跳
         fail-fast: false    # 🚨 关键配置：Nacos 不可用时启动不报错
   config:

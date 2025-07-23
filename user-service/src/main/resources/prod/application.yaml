@@ -9,17 +9,20 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: nacos-standalone:8848
-        namespace: public
+        server-addr: xiaozao-nacos:8848
         watch-delay: 5000  # 延迟注册时间（单位：毫秒）
         group: DEFAULT_GROUP
         file-extension: yaml
         refresh-enabled: true
+        username: ${SPRING_CLOUD_NACOS_USERNAME:nacos}
+        password: ${SPRING_CLOUD_NACOS_PASSWORD:nac@890}
       discovery:
-        server-addr: nacos-standalone:8848
-        namespace: public
+        server-addr: xiaozao-nacos:8848
+        watch-delay: 5000               # 延迟10秒后开始监听服务变更，间接延迟注册
         group: DEFAULT_GROUP
         heartbeat-interval: 5000  # 每5秒发送一次心跳
+        username: ${SPRING_CLOUD_NACOS_USERNAME:nacos}
+        password: ${SPRING_CLOUD_NACOS_PASSWORD:nac@890}
   config:
     import: optional:nacos:${spring.application.name}.yaml
 

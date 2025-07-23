@@ -5,11 +5,13 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: nacos-standalone:8848
+        server-addr: xiaozao-nacos:8848
         namespace: public
         group: DEFAULT_GROUP
         watch-delay: 3000
         heartbeat-interval: 5000  # 每5秒发送一次心跳
+        username: ${SPRING_CLOUD_NACOS_USERNAME:nacos}
+        password: ${SPRING_CLOUD_NACOS_PASSWORD:nac@890}
     gateway:
       routes:
         - id: user-service-route

@@ -5,9 +5,9 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
-        namespace: public
-        group: DEFAULT_GROUP
+        server-addr: www.xiaozaoshu.com:10082
+        username: ${SPRING_CLOUD_NACOS_USERNAME:nacos}
+        password: ${SPRING_CLOUD_NACOS_PASSWORD:nac@890}
     gateway:
       routes:
         - id: user-service-route
