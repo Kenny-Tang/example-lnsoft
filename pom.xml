@@ -81,7 +81,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-
+			<dependency>
+				<groupId>io.grpc</groupId>
+				<artifactId>grpc-bom</artifactId>
+				<version>1.57.2</version> <!-- 与 grpc-spring-boot-starter 兼容 -->
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 			<dependency>
 				<groupId>com.redjujubetree</groupId>
 				<artifactId>common</artifactId>

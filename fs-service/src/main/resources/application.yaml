@@ -8,10 +8,15 @@ spring:
     active: dev
   datasource:
     # url: jdbc:sqlite:/Users/kenny/IdeaProjects/file-storage-db # 创建的sqlite数据库所在路径
-    url: jdbc:sqlite:file:/Users/kenny/Library/DBeaverData/workspace6/.metadata/sample-database-sqlite-1/Chinook.db # 创建的sqlite数据库所在路径
+    url: jdbc:sqlite:file:/Users/kenny/Library/DBeaverData/workspace6/.metadata/sample-database-sqlite-1/Chinook.db?journal_mode=WAL&busy_timeout=30000&synchronous=NORMAL&cache=shared&read_uncommitted=true
     username: # 因为没有用户名和密码，所以这两个参数就没有值
     password:
     driver-class-name: org.sqlite.JDBC # sqlite驱动
+    schema: classpath:schema.sql
+    initialization-mode: always
+    hikari:
+      maximum-pool-size: 1
+      minimum-idle: 1
 
   cloud:
     nacos:
@@ -22,11 +27,13 @@ spring:
         group: DEFAULT_GROUP
         file-extension: yaml
         refresh-enabled: true
+        fail-fast: false    # 🚨 关键配置：Nacos 不可用时启动不报错
       discovery:
         server-addr: 127.0.0.1:8848
         namespace: public
         group: DEFAULT_GROUP
         heartbeat-interval: 5000  # 每5秒发送一次心跳
+        fail-fast: false    # 🚨 关键配置：Nacos 不可用时启动不报错
   config:
     import: optional:nacos:${spring.application.name}.yaml
 
@@ -42,6 +49,19 @@ management:
     web:
       exposure:
         include: health,info
+
+# gRPC 服务端配置
+grpc:
+  server:
+    port: 9090
+    # 启用反射服务（可选，用于调试）
+    reflection-service-enabled: true
+    # 启用健康检查
+    health-service-enabled: true
+    # 最大消息大小
+    max-inbound-message-size: 4MB
+    # 最大元数据大小
+    max-inbound-metadata-size: 8KB
 
 logging:
   level:

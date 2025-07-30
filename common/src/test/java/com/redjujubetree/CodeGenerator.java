@@ -14,12 +14,16 @@ import java.util.Scanner;
 
 public class CodeGenerator {
 	public static void main(String[] args) {
-		FastAutoGenerator.create("jdbc:mysql://47.113.144.60:7500/xiaozaoshu?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8", "root", "1234Qwer")
+		String url = "jdbc:mysql://47.113.144.60:7500/xiaozaoshu?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8";
+		String password = "1234Qwer";
+		String username = "root";
+		String author = "tanjianwei";
+		FastAutoGenerator.create(url, username, password)
 				.globalConfig(builder ->
-					builder.author("tanjianwei") // 设置作者
-							.outputDir(System.getProperty("user.dir") + "/user-service/src/main/java") // 设置输出路径
-							.dateType(DateType.ONLY_DATE)// 设置时间策略
-							.disableOpenDir() // 禁止打开输出目录
+							builder.author(author) // 设置作者
+									.outputDir(System.getProperty("user.dir") + "/user-service/src/main/java") // 设置输出路径
+									.dateType(DateType.ONLY_DATE)// 设置时间策略
+									.disableOpenDir()// 禁止打开输出目录
 				)
 				.dataSourceConfig(builder ->
 						builder.typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {

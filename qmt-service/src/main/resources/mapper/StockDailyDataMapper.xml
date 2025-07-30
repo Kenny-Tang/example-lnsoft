@@ -18,7 +18,7 @@
         GROUP BY DATE_FORMAT(sdd.trade_date, '%Y%U'), sdd.ts_code
         ) p
         JOIN (
-        select * from kenny_stock_info_view order by pct_estimated desc limit 0 , 12
+        select * from  order by pct_estimated desc limit 0 , 12
         ) ksi ON p.ts_code = ksi.code
         order by ksi.pct_estimated desc
     </select>
