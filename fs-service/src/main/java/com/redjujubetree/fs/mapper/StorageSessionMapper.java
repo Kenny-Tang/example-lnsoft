@@ -56,21 +56,19 @@ public interface StorageSessionMapper extends BaseMapper<StorageSessionEntity> {
     /**
      * Get session with upload progress
      */
-    @Select("""
-        SELECT s.*, 
-               COALESCE(c.uploaded_count, 0) as uploaded_count,
-               CASE 
-                   WHEN s.total_chunks = 0 THEN 0 
-                   ELSE ROUND(COALESCE(c.uploaded_count, 0) * 100.0 / s.total_chunks, 2) 
-               END as upload_progress
-        FROM storage_sessions s
-        LEFT JOIN (
-            SELECT storage_id, COUNT(*) as uploaded_count 
-            FROM uploaded_chunks 
-            GROUP BY storage_id
-        ) c ON s.storage_id = c.storage_id
-        WHERE s.storage_id = #{storageId}
-        """)
+    @Select("SELECT s.*, \n" +
+            "               COALESCE(c.uploaded_count, 0) as uploaded_count,\n" +
+            "               CASE \n" +
+            "                   WHEN s.total_chunks = 0 THEN 0 \n" +
+            "                   ELSE ROUND(COALESCE(c.uploaded_count, 0) * 100.0 / s.total_chunks, 2) \n" +
+            "               END as upload_progress\n" +
+            "        FROM storage_sessions s\n" +
+            "        LEFT JOIN (\n" +
+            "            SELECT storage_id, COUNT(*) as uploaded_count \n" +
+            "            FROM uploaded_chunks \n" +
+            "            GROUP BY storage_id\n" +
+            "        ) c ON s.storage_id = c.storage_id\n" +
+            "        WHERE s.storage_id = #{storageId}")
     @Results({
         @Result(property = "storageId", column = "storage_id"),
         @Result(property = "originalFileName", column = "original_filename"),

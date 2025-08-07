@@ -48,28 +48,22 @@ public interface UploadedChunkMapper extends BaseMapper<UploadedChunkEntity> {
     /**
      * Batch insert chunks
      */
-    @Insert("""
-        <script>
-        INSERT INTO uploaded_chunks (storage_id, chunk_index, chunk_size, chunk_checksum, chunk_offset, uploaded_time, create_time, update_time)
-        VALUES
-        <foreach collection="chunks" item="chunk" separator=",">
-            (#{chunk.storageId}, #{chunk.chunkIndex}, #{chunk.chunkSize}, #{chunk.chunkChecksum}, #{chunk.chunkOffset}, #{chunk.uploadedTime}, NOW(), NOW())
-        </foreach>
-        </script>
-        """)
+    @Insert("INSERT INTO uploaded_chunks (storage_id, chunk_index, chunk_size, chunk_checksum, chunk_offset, uploaded_time, create_time, update_time)\n" +
+            "        VALUES\n" +
+            "        <foreach collection=\"chunks\" item=\"chunk\" separator=\",\">\n" +
+            "            (#{chunk.storageId}, #{chunk.chunkIndex}, #{chunk.chunkSize}, #{chunk.chunkChecksum}, #{chunk.chunkOffset}, #{chunk.uploadedTime}, NOW(), NOW())\n" +
+            "        </foreach>")
     int batchInsertChunks(@Param("chunks") List<UploadedChunkEntity> chunks);
     
     /**
      * Get upload statistics for a session
      */
-    @Select("""
-        SELECT 
-            COUNT(*) as uploaded_count,
-            SUM(chunk_size) as uploaded_size,
-            MIN(uploaded_time) as first_upload_time,
-            MAX(uploaded_time) as last_upload_time
-        FROM uploaded_chunks 
-        WHERE storage_id = #{storageId}
-        """)
+    @Select("SELECT \n" +
+            "            COUNT(*) as uploaded_count,\n" +
+            "            SUM(chunk_size) as uploaded_size,\n" +
+            "            MIN(uploaded_time) as first_upload_time,\n" +
+            "            MAX(uploaded_time) as last_upload_time\n" +
+            "        FROM uploaded_chunks \n" +
+            "        WHERE storage_id = #{storageId}")
     Map<String, Object> getUploadStatistics(@Param("storageId") String storageId);
 }

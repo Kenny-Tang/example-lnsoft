@@ -553,7 +553,7 @@ public class StorageSessionServiceImpl implements StorageSessionService {
         if (entity.getCustomMetadata() != null) {
             try {
                 customMetadata = objectMapper.readValue(entity.getCustomMetadata(), 
-                    new TypeReference<>() {});
+                    new TypeReference<Map>() {});
             } catch (Exception e) {
                 log.warn("Failed to deserialize custom metadata for session: {}", entity.getStorageId(), e);
                 customMetadata = new HashMap<>();

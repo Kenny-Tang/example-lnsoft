@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+option java_package = "com.redjujubetree.fs.grpc";
+option java_outer_classname = "FileTransferUploadProto";
+
+package file.transfer.upload;
+
+service FileTransferUploadService {
+  // 初始化上传会话
+  rpc InitiateUpload(InitiateUploadRequest) returns (InitiateUploadResponse);
+
+  // 并发上传分片（支持多个并发流）
+  rpc UploadChunk(stream UploadChunkRequest) returns (stream UploadChunkResponse);
+
+  // 查询已上传的分片状态
+  rpc GetUploadStatus(GetUploadStatusRequest) returns (GetUploadStatusResponse);
+
+  // 完成上传（合并文件）
+  rpc CompleteUpload(CompleteUploadRequest) returns (CompleteUploadResponse);
+
+  // 取消上传
+  rpc CancelUpload(CancelUploadRequest) returns (CancelUploadResponse);
+}
+
+// 初始化上传请求
+message InitiateUploadRequest {
+  string file_name = 1;         // 文件名
+  int64 file_size = 2;          // 文件总大小
+  string file_hash = 3;         // 文件整体哈希（MD5/SHA256）
+  string client_id = 4;         // 客户端标识
+}
+
+// 初始化上传响应
+message InitiateUploadResponse {
+  bool success = 1;
+  string upload_id = 2;         // 上传会话ID
+  string message = 3;
+  repeated int32 uploaded_chunks = 4;  // 已上传的分片编号（用于续传）
+  int32 total_chunks = 5;       // 总分片数
+  int32 chunk_size = 6;       // 总分片数
+}
+
+// 上传分片请求
+message UploadChunkRequest {
+  string upload_id = 1;         // 上传会话ID
+  int32 chunk_index = 2;        // 分片索引（从0开始）
+  int64 chunk_offset = 3;       // 分片在文件中的偏移量
+  int32 chunk_size = 4;         // 分片实际大小
+  bytes chunk_data = 5;         // 分片数据
+  string chunk_hash = 6;        // 分片哈希值
+  int64 timestamp = 7;          // 时间戳
+}
+
+// 上传分片响应
+message UploadChunkResponse {
+  bool success = 1;
+  string upload_id = 2;
+  int32 chunk_index = 3;
+  string message = 4;
+  int64 received_timestamp = 5;
+}
+
+// 获取上传状态请求
+message GetUploadStatusRequest {
+  string upload_id = 1;
+}
+
+// 获取上传状态响应
+message GetUploadStatusResponse {
+  bool success = 1;
+  string upload_id = 2;
+  string status = 3;            // UPLOADING, COMPLETED, FAILED, CANCELLED
+  repeated int32 uploaded_chunks = 4;  // 已上传的分片编号
+  repeated int32 missing_chunks = 5;   // 缺失的分片编号
+  int32 total_chunks = 6;
+  int32 uploaded_count = 7;
+  double progress = 8;          // 上传进度 0.0-1.0
+  string message = 9;
+}
+
+// 完成上传请求
+message CompleteUploadRequest {
+  string upload_id = 1;
+}
+
+// 完成上传响应
+message CompleteUploadResponse {
+  bool success = 1;
+  string message = 2;
+  string file_path = 3;         // 最终文件路径
+  string file_hash = 4;         // 验证后的文件哈希
+}
+
+// 取消上传请求
+message CancelUploadRequest {
+  string upload_id = 1;
+}
+
+// 取消上传响应
+message CancelUploadResponse {
+  bool success = 1;
+  string message = 2;
+}

@@ -1,0 +1,150 @@
+syntax = "proto3";
+
+option java_package = "com.redjujubetree.fs.grpc";
+option java_outer_classname = "FileTransferDownloadProto";
+
+package file.transfer.download;
+
+service FileTransferDownloadService {
+  // ========== 文件下载功能 ==========
+  // 初始化下载会话
+  rpc InitiateDownload(InitiateDownloadRequest) returns (InitiateDownloadResponse);
+
+  // 下载分片（支持并发下载多个分片）
+  rpc DownloadChunk(DownloadChunkRequest) returns (stream DownloadChunkResponse);
+
+  // 获取下载状态
+  rpc GetDownloadStatus(GetDownloadStatusRequest) returns (GetDownloadStatusResponse);
+
+  // 取消下载
+  rpc CancelDownload(CancelDownloadRequest) returns (CancelDownloadResponse);
+
+  // ========== 文件管理功能 ==========
+  // 列出可下载的文件
+  rpc ListFiles(ListFilesRequest) returns (ListFilesResponse);
+
+  // 获取文件详细信息
+  rpc GetFileInfo(GetFileInfoRequest) returns (GetFileInfoResponse);
+}
+
+// ========== 下载相关消息 ==========
+// 初始化下载请求
+message InitiateDownloadRequest {
+  string file_id = 1;           // 文件唯一标识
+  string client_id = 2;         // 客户端标识
+  int64 start_offset = 3;       // 下载起始位置（支持断点续传）
+  int64 end_offset = 4;         // 下载结束位置（-1表示到文件末尾）
+  int32 preferred_chunk_size = 5; // 客户端首选的分片大小
+}
+
+// 初始化下载响应
+message InitiateDownloadResponse {
+  bool success = 1;
+  string download_id = 2;       // 下载会话ID
+  string message = 3;
+  FileInfo file_info = 4;       // 文件信息
+  int32 total_chunks = 5;       // 总分片数
+  int32 chunk_size = 6;         // 实际分片大小
+  int64 download_size = 7;      // 本次下载的总大小
+}
+
+// 下载分片请求
+message DownloadChunkRequest {
+  string download_id = 1;       // 下载会话ID
+  repeated int32 chunk_indexes = 2; // 请求的分片索引列表（支持并发下载）
+  int32 max_concurrent_chunks = 3;  // 最大并发分片数
+}
+
+// 下载分片响应（流式返回）
+message DownloadChunkResponse {
+  bool success = 1;
+  string download_id = 2;
+  int32 chunk_index = 3;        // 分片索引
+  int64 chunk_offset = 4;       // 分片在文件中的偏移量
+  int32 chunk_size = 5;         // 分片实际大小
+  bytes chunk_data = 6;         // 分片数据
+  string chunk_hash = 7;        // 分片哈希值
+  bool is_last_chunk = 8;       // 是否为最后一个分片
+  string message = 9;
+  int64 sent_timestamp = 10;    // 发送时间戳
+}
+
+// 获取下载状态请求
+message GetDownloadStatusRequest {
+  string download_id = 1;
+}
+
+// 获取下载状态响应
+message GetDownloadStatusResponse {
+  bool success = 1;
+  string download_id = 2;
+  string status = 3;            // DOWNLOADING, COMPLETED, FAILED, CANCELLED, PAUSED
+  repeated int32 downloaded_chunks = 4; // 已下载的分片编号
+  repeated int32 pending_chunks = 5;    // 待下载的分片编号
+  int32 total_chunks = 6;
+  int32 downloaded_count = 7;
+  double progress = 8;          // 下载进度 0.0-1.0
+  int64 downloaded_bytes = 9;   // 已下载字节数
+  int64 total_bytes = 10;       // 总字节数
+  double download_speed = 11;   // 下载速度 (bytes/second)
+  string message = 12;
+}
+
+// 取消下载请求
+message CancelDownloadRequest {
+  string download_id = 1;
+}
+
+// 取消下载响应
+message CancelDownloadResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// ========== 文件管理相关消息 ==========
+// 文件信息
+message FileInfo {
+  string file_id = 1;           // 文件唯一标识
+  string file_name = 2;         // 文件名
+  int64 file_size = 3;          // 文件大小
+  string file_hash = 4;         // 文件哈希
+  string content_type = 5;      // 内容类型 (MIME type)
+  int64 created_timestamp = 6;  // 创建时间戳
+  int64 modified_timestamp = 7; // 修改时间戳
+  map<string, string> metadata = 8; // 文件元数据
+  string owner_id = 9;          // 文件所有者ID
+  repeated string tags = 10;    // 文件标签
+}
+
+// 列出文件请求
+message ListFilesRequest {
+  string client_id = 1;         // 客户端标识（用于权限控制）
+  int32 page_size = 2;          // 分页大小
+  string page_token = 3;        // 分页令牌
+  string filter = 4;            // 过滤条件（文件名模式）
+  string sort_by = 5;           // 排序字段 (name, size, created_time, modified_time)
+  bool ascending = 6;           // 是否升序
+  repeated string tags = 7;     // 按标签过滤
+}
+
+// 列出文件响应
+message ListFilesResponse {
+  bool success = 1;
+  repeated FileInfo files = 2;
+  string next_page_token = 3;   // 下一页令牌
+  int32 total_count = 4;        // 总文件数
+  string message = 5;
+}
+
+// 获取文件信息请求
+message GetFileInfoRequest {
+  string file_id = 1;           // 文件ID
+  string client_id = 2;         // 客户端标识
+}
+
+// 获取文件信息响应
+message GetFileInfoResponse {
+  bool success = 1;
+  FileInfo file_info = 2;
+  string message = 3;
+}

@@ -34,7 +34,7 @@ public class FileStorageController {
 
 	public BaseResponse save(FileStorage fileStorage) {
 		try {
-			fileStorageService.saveFileStorage(fileStorage);
+			//fileStorageService.saveFileStorage(fileStorage);
 			return new BaseResponse(RespCodeEnum.SUCCESS.getCode(), RespCodeEnum.SUCCESS.getMessage());
 		} catch(IllegalArgumentException e){
 			log.warn(e.getMessage(), e);
@@ -54,7 +54,7 @@ public class FileStorageController {
 			if (fileStorage.getKey() == null || fileStorage.getKey().isEmpty()) {
 				fileStorage.setKey(SystemClock.currentTimeMillis()+"");
 			}
-			fileStorageService.saveFileStorage(fileStorage);
+//			fileStorageService.saveFileStorage(fileStorage);
 			return new BaseResponse(RespCodeEnum.SUCCESS.getCode(), RespCodeEnum.SUCCESS.getMessage());
 		} catch(IllegalArgumentException e){
 			log.warn(e.getMessage(), e);
