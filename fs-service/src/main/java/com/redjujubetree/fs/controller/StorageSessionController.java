@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -92,13 +93,14 @@ public class StorageSessionController {
         List<Integer> uploadedChunks = sessionService.getUploadedChunks(storageId);
         List<Integer> missingChunks = sessionService.getMissingChunks(storageId);
         boolean isComplete = sessionService.isUploadComplete(storageId);
-        
-        Map<String, Object> progressInfo = Map.of(
-            "progress", progress,
-            "uploadedChunks", uploadedChunks,
-            "missingChunks", missingChunks,
-            "isComplete", isComplete
-        );
+
+        Map<String, Object> progressInfo = new HashMap<String, Object>() {{
+            put("progress", progress);
+            put("uploadedChunks", uploadedChunks);
+            put("missingChunks", missingChunks);
+            put("isComplete", isComplete);
+        }};
+
         
         return ResponseEntity.ok(ApiResponse.success(progressInfo));
     }

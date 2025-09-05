@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redjujubetree.fs.mapper.TenderEvaluationCenterMapper">
+
+    <insert id="insertTenderEvaluationCenter">
+        INSERT INTO tender_evaluation_center
+        (id, client_id, center_name, center_ip, server_name, online_time, online_status, is_deleted, create_time, update_time, create_user)
+        VALUES(#{id}, #{clientId}, #{centerName}, #{centerIp}, #{serverName}, #{onlineTime}, #{onlineStatus}, #{isDeleted}, #{createTime}, #{updateTime}, #{createUser})
+    </insert>
+    <update id="updateTenderEvaluationCenter">
+        update tender_evaluation_center
+        set center_name = #{centerName},
+            center_ip = #{centerIp},
+            server_name = #{serverName},
+            online_time = #{onlineTime},
+            online_status = #{onlineStatus},
+            is_deleted = #{isDeleted},
+            create_time = #{createTime},
+            update_time = #{updateTime},
+            create_user = #{createUser}
+        where client_id = #{clientId}
+    </update>
+    <select id="selectByClientId" resultType="com.redjujubetree.fs.domain.entity.TenderEvaluationCenter">
+        select id, client_id, center_name, center_ip, server_name, online_time, online_status, is_deleted, create_time, update_time, create_user
+        from tender_evaluation_center
+        where client_id = #{clientId}
+    </select>
+
+</mapper>

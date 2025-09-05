@@ -9,7 +9,7 @@
         <version>0.0.2-SNAPSHOT</version>
     </parent>
 
-    <artifactId>fs-service</artifactId>
+    <artifactId>fs-client</artifactId>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -17,10 +17,19 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <aliyun.oss.version>3.17.4</aliyun.oss.version>
         <grpc.spring-boot.version>2.15.0.RELEASE</grpc.spring-boot.version>
-        <project.version>0.0.2-SNAPSHOT</project.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.google.code.maven-replacer-plugin</groupId>
+            <artifactId>replacer</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
@@ -28,7 +37,7 @@
         <!-- gRPC Core -->
         <dependency>
             <groupId>top.redjujubetree</groupId>
-            <artifactId>grpc-tunnel-server-spring-boot-starter</artifactId>
+            <artifactId>grpc-tunnel-client-spring-boot-starter</artifactId>
         </dependency>
 
         <dependency>
@@ -47,16 +56,6 @@
             <groupId>net.openhft</groupId>
             <artifactId>chronicle-queue</artifactId>
             <version>5.23ea24</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tika</groupId>
-            <artifactId>tika-core</artifactId>
-            <version>2.9.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tika</groupId>
-            <artifactId>tika-parsers-standard-package</artifactId>
-            <version>2.9.1</version>
         </dependency>
 
         <dependency>
@@ -92,20 +91,15 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Spring Cloud Alibaba Nacos Discovery -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
-
         <!-- Spring Boot Actuator (暴露 /actuator/health) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.41.2.1</version> <!-- 请检查是否为最新版本 -->
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>

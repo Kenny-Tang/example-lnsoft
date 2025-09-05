@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>在线状态监控</title>
+    <style>
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .status { background: #f0f0f0; padding: 10px; margin: 10px 0; }
+        .online { color: green; }
+        .offline { color: red; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>实时在线状态监控</h1>
+    <div id="connection-status" class="status">未连接</div>
+    <div id="online-users"></div>
+
+    <button onclick="client.connect()">连接</button>
+    <button onclick="client.disconnect()">断开</button>
+</div>
+
+<script>
+
+    class OnlineStatusClient {
+        constructor(userId) {
+            this.userId = userId;
+            this.websocket = null;
+            this.reconnectInterval = 5000;
+            this.heartbeatInterval = 30000;
+            this.heartbeatTimer = null;
+        }
+
+        connect() {
+            const url = `ws://10.2.20.182:18955/ws/online?userId=${this.userId}`;
+            this.websocket = new WebSocket(url);
+
+            this.websocket.onopen = (event) => {
+                console.log('WebSocket连接已建立');
+                this.startHeartbeat();
+            };
+
+            this.websocket.onmessage = (event) => {
+                const message = JSON.parse(event.data);
+                this.handleMessage(message);
+            };
+
+            this.websocket.onclose = (event) => {
+                console.log('WebSocket连接已关闭');
+                this.stopHeartbeat();
+                // 自动重连
+                setTimeout(() => this.connect(), this.reconnectInterval);
+            };
+
+            this.websocket.onerror = (error) => {
+                console.error('WebSocket错误:', error);
+            };
+        }
+
+        handleMessage(message) {
+            switch(message.type) {
+                case 'online_status':
+                    this.updateOnlineStatus(message.data);
+                    break;
+                case 'heartbeat':
+                    console.log('收到心跳响应');
+                    break;
+                default:
+                    console.log('收到未知消息:', message);
+            }
+        }
+
+        updateOnlineStatus(onlineUsers) {
+            console.log('在线用户更新:', onlineUsers);
+            // 更新页面上的在线状态显示
+            this.renderOnlineUsers(onlineUsers);
+        }
+
+        renderOnlineUsers(users) {
+            const container = document.getElementById('online-users');
+            if (container) {
+                container.innerHTML = `
+                    <h3>在线用户 (${users.length})</h3>
+                    <ul>
+                        ${users.map(user => `
+                            <li>用户ID: ${user.userId} - 状态: ${user.status}</li>
+                        `).join('')}
+                    </ul>
+                `;
+            }
+        }
+
+        startHeartbeat() {
+            this.heartbeatTimer = setInterval(() => {
+                if (this.websocket.readyState === WebSocket.OPEN) {
+                    this.send({
+                        type: 'heartbeat',
+                        data: 'ping'
+                    });
+                }
+            }, this.heartbeatInterval);
+        }
+
+        stopHeartbeat() {
+            if (this.heartbeatTimer) {
+                clearInterval(this.heartbeatTimer);
+                this.heartbeatTimer = null;
+            }
+        }
+
+        send(message) {
+            if (this.websocket.readyState === WebSocket.OPEN) {
+                this.websocket.send(JSON.stringify(message));
+            }
+        }
+
+        disconnect() {
+            this.stopHeartbeat();
+            if (this.websocket) {
+                this.websocket.close();
+            }
+        }
+    }
+    // 包含上面的JavaScript代码
+    const client = new OnlineStatusClient('user' + Math.floor(Math.random() * 1000));
+
+    // 页面加载时自动连接
+    window.onload = () => {
+        client.connect();
+    };
+
+    // 页面关闭时断开连接
+    window.onbeforeunload = () => {
+        client.disconnect();
+    };
+</script>
+</body>
+</html>

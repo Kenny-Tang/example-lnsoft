@@ -1,23 +1,23 @@
 server:
-  port: 8081
+  port: 8080
 
 spring:
   application:
     name: user-service
   profiles:
     active: dev
-  datasource:
-    # url: jdbc:sqlite:/Users/kenny/IdeaProjects/file-storage-db # 创建的sqlite数据库所在路径
-    url: jdbc:sqlite:file:/Users/kenny/Library/DBeaverData/workspace6/.metadata/sample-database-sqlite-1/Chinook.db?journal_mode=WAL&busy_timeout=30000&synchronous=NORMAL&cache=shared&read_uncommitted=true
-    username: # 因为没有用户名和密码，所以这两个参数就没有值
-    password:
-    driver-class-name: org.sqlite.JDBC # sqlite驱动
-    schema: classpath:schema.sql
-    initialization-mode: always
-    hikari:
-      maximum-pool-size: 1
-      minimum-idle: 1
-
+    #sqlite
+#  datasource:
+#    # url: jdbc:sqlite:/Users/kenny/IdeaProjects/file-storage-db # 创建的sqlite数据库所在路径
+#    url: jdbc:sqlite:file:/Users/kenny/Library/DBeaverData/workspace6/.metadata/sample-database-sqlite-1/Chinook.db?journal_mode=WAL&busy_timeout=30000&synchronous=NORMAL&cache=shared&read_uncommitted=true
+#    username: # 因为没有用户名和密码，所以这两个参数就没有值
+#    password:
+#    driver-class-name: org.sqlite.JDBC # sqlite驱动
+#    schema: classpath:schema.sql
+#    initialization-mode: always
+#    hikari:
+#      maximum-pool-size: 1
+#      minimum-idle: 1
   cloud:
     nacos:
       config:
@@ -44,6 +44,9 @@ mybatis-plus:
     db-config:
       id-type: auto
 
+
+
+
 management:
   endpoints:
     web:
@@ -62,6 +65,21 @@ grpc:
     max-inbound-message-size: 4MB
     # 最大元数据大小
     max-inbound-metadata-size: 8KB
+  tunnel:
+    server:
+      thread-pool-size: 20
+      queue-capacity: 1000
+      heartbeat-check-interval: 30000
+
+#  client:
+#    myGrpcClient: # 客户端名称，用于注入和区分多个客户端
+#      address: static://localhost:9090  # 服务端地址（static:// 是必要的前缀）
+#      negotiationType: plaintext        # 加密方式：plaintext / TLS
+#      enableKeepAlive: true            # 开启心跳保活（可选）
+#      keepAliveWithoutCalls: true      # 即使无调用也发送心跳
+#      maxInboundMessageSize: 4MB       # 设置最大消息大小
+#      deadline: 5s                     # 设置默认调用超时
+
 
 logging:
   level:

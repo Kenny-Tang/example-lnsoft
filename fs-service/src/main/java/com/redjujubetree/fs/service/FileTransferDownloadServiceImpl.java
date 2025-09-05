@@ -4,9 +4,9 @@ package com.redjujubetree.fs.service;
 import com.redjujubetree.fs.grpc.FileTransferDownloadProto.*;
 import com.redjujubetree.fs.grpc.FileTransferDownloadServiceGrpc;
 import io.grpc.stub.StreamObserver;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-@Service
+@GrpcService
 public class FileTransferDownloadServiceImpl extends FileTransferDownloadServiceGrpc.FileTransferDownloadServiceImplBase {
     
     private static final Logger logger = LoggerFactory.getLogger(FileTransferDownloadServiceImpl.class);
